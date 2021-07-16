@@ -18,6 +18,7 @@ final class ChatUserListViewController: UIViewController {
     )
 
     private var selectedUser: User?
+    private var dataSource: ChatUserListDataSource!
     private var cancellables: Set<AnyCancellable> = []
 }
 
@@ -72,13 +73,15 @@ private extension ChatUserListViewController {
     }
 
     func setupTableView() {
+        dataSource = ChatUserListDataSource(viewModel: viewModel)
+        tableView.dataSource = dataSource
+
         tableView.register(
             ChatUserListTableViewCell.self,
             forCellReuseIdentifier: ChatUserListTableViewCell.resourceName
         )
         tableView.tableFooterView = UIView()
         tableView.delegate = self
-        tableView.dataSource = self
         tableView.rowHeight = 80
     }
 
@@ -126,30 +129,6 @@ extension ChatUserListViewController: UITableViewDelegate {
     ) {
         tableView.cellForRow(at: indexPath)?.accessoryType = .none
         navigationItem.rightBarButtonItem?.isEnabled = false
-    }
-}
-
-extension ChatUserListViewController: UITableViewDataSource {
-
-    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        viewModel.userList.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ChatUserListTableViewCell.resourceName,
-            for: indexPath
-        )
-
-        if let chatUserListCell = cell as? ChatUserListTableViewCell {
-            chatUserListCell.selectionStyle = .none
-
-            if let user = viewModel.userList.any(at: indexPath.row) {
-                chatUserListCell.setup(user: user)
-            }
-        }
-
-        return cell
     }
 }
 

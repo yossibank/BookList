@@ -6,13 +6,10 @@ final class ChatUserListViewModel: ViewModel {
     typealias State = LoadingState<[User], APPError>
 
     private(set) var userList: [User] = []
-    private var cancellables: Set<AnyCancellable> = []
 
     @Published private(set) var state: State = .standby
 
-    func createRoom(partnerUser: User) {
-        FirestoreManager.shared.createRoom(partnerUser: partnerUser)
-    }
+    private var cancellables: Set<AnyCancellable> = []
 
     func fetchUsers() {
         state = .loading
@@ -32,5 +29,9 @@ final class ChatUserListViewModel: ViewModel {
                 self.state = .done(state)
             }
             .store(in: &cancellables)
+    }
+
+    func createRoom(partnerUser: User) {
+        FirestoreManager.shared.createRoom(partnerUser: partnerUser)
     }
 }

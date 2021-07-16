@@ -99,6 +99,7 @@
 		78B8A69025E54021005BCB16 /* OtherMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B8A68E25E54021005BCB16 /* OtherMessageTableViewCell.swift */; };
 		78B8A69125E54021005BCB16 /* OtherMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B8A68F25E54021005BCB16 /* OtherMessageTableViewCell.xib */; };
 		78B8A69625E54AEB005BCB16 /* MyMessageBalloonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B8A69525E54AEB005BCB16 /* MyMessageBalloonView.swift */; };
+		78BF737E26A1C710001A8092 /* ChatUserListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF737D26A1C710001A8092 /* ChatUserListDataSource.swift */; };
 		78C61C2C25A1716800DC78A6 /* String+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C61C2B25A1716800DC78A6 /* String+Util.swift */; };
 		78C7F3A725E525C5005E9E2B /* ChatSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C7F3A625E525C5005E9E2B /* ChatSelectViewController.swift */; };
 		78C7F3B125E52C94005E9E2B /* ChatSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C7F3AF25E52C94005E9E2B /* ChatSelectTableViewCell.swift */; };
@@ -243,6 +244,7 @@
 		78B8A68E25E54021005BCB16 /* OtherMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherMessageTableViewCell.swift; sourceTree = "<group>"; };
 		78B8A68F25E54021005BCB16 /* OtherMessageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OtherMessageTableViewCell.xib; sourceTree = "<group>"; };
 		78B8A69525E54AEB005BCB16 /* MyMessageBalloonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageBalloonView.swift; sourceTree = "<group>"; };
+		78BF737D26A1C710001A8092 /* ChatUserListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUserListDataSource.swift; sourceTree = "<group>"; };
 		78C61C2B25A1716800DC78A6 /* String+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Util.swift"; sourceTree = "<group>"; };
 		78C7F3A625E525C5005E9E2B /* ChatSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSelectViewController.swift; sourceTree = "<group>"; };
 		78C7F3AF25E52C94005E9E2B /* ChatSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSelectTableViewCell.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 		7805908325F48A54002B5296 /* ChatUserList */ = {
 			isa = PBXGroup;
 			children = (
+				78BF737D26A1C710001A8092 /* ChatUserListDataSource.swift */,
 				7805908725F48A94002B5296 /* ChatUserListViewController.swift */,
 				7826A73C25F7A885006F23AD /* ChatUserListViewModel.swift */,
 			);
@@ -1006,6 +1009,7 @@
 				7892EF70259C721F006F7315 /* Resources.swift in Sources */,
 				78F940EE259D995F007C972A /* ResourcesSupport.swift in Sources */,
 				78752AAF267EF412000B87AC /* LabelStyle.swift in Sources */,
+				78BF737E26A1C710001A8092 /* ChatUserListDataSource.swift in Sources */,
 				78FE8CD6267B76750006612E /* FirebaseProvider.swift in Sources */,
 				7824042F25E9374D0001AB52 /* IBDesignableTextView.swift in Sources */,
 				783FBBCB2686CEAB0013CCD7 /* AccountRouting.swift in Sources */,
