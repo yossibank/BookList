@@ -18,7 +18,6 @@ final class ChatUserListViewController: UIViewController {
     )
 
     private var selectedUser: User?
-    private var dataSource: ChatUserListDataSource!
     private var cancellables: Set<AnyCancellable> = []
 }
 
@@ -33,6 +32,7 @@ extension ChatUserListViewController {
         setupLayout()
         setupNavigationItem()
         setupTableView()
+        bindViewModel()
     }
 }
 
@@ -72,16 +72,35 @@ private extension ChatUserListViewController {
     }
 
     func setupTableView() {
-        dataSource = ChatUserListDataSource()
-        tableView.dataSource = dataSource
-
         tableView.register(
             ChatUserListTableViewCell.self,
             forCellReuseIdentifier: ChatUserListTableViewCell.resourceName
         )
         tableView.tableFooterView = UIView()
         tableView.delegate = self
+        tableView.dataSource = self
         tableView.rowHeight = 80
+    }
+
+    func bindViewModel() {
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                    case .standby:
+                        print("standby")
+
+                    case .loading:
+                        print("loading")
+
+                    case .done:
+                        self?.tableView.reloadData()
+
+                    case let .failed(error):
+                        self?.showError(error: error)
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -96,7 +115,7 @@ extension ChatUserListViewController: UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         navigationItem.rightBarButtonItem?.isEnabled = true
 
-        if let user = dataSource.chatUserList.any(at: indexPath.row) {
+        if let user = viewModel.userList.any(at: indexPath.row) {
             selectedUser = user
         }
     }
@@ -107,6 +126,30 @@ extension ChatUserListViewController: UITableViewDelegate {
     ) {
         tableView.cellForRow(at: indexPath)?.accessoryType = .none
         navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+}
+
+extension ChatUserListViewController: UITableViewDataSource {
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        viewModel.userList.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: ChatUserListTableViewCell.resourceName,
+            for: indexPath
+        )
+
+        if let chatUserListCell = cell as? ChatUserListTableViewCell {
+            chatUserListCell.selectionStyle = .none
+
+            if let user = viewModel.userList.any(at: indexPath.row) {
+                chatUserListCell.setup(user: user)
+            }
+        }
+
+        return cell
     }
 }
 

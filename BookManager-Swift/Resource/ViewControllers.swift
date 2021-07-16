@@ -67,10 +67,7 @@ extension Resources {
 
             func chatUserList() -> ChatUserListViewController {
                 let vc = ChatUserListViewController()
-                vc.inject(
-                    routing: NoRouting(),
-                    viewModel: ChatUserListViewModel(usecase: ChatUserListUsecase())
-                )
+                vc.inject(routing: NoRouting(), viewModel: ChatUserListViewModel())
                 return vc
             }
 
