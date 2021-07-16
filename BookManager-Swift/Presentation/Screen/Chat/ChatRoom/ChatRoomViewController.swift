@@ -25,9 +25,6 @@ final class ChatRoomViewController: UIViewController {
 
     private var dataSource: ChatRoomDataSource!
     private var cancellables: Set<AnyCancellable> = []
-    private var safeAreaBottom: CGFloat {
-        view.safeAreaInsets.bottom
-    }
 
     private lazy var keyboardAccessoryView: KeyboardAccessoryView = {
         let view = KeyboardAccessoryView()
@@ -94,11 +91,10 @@ private extension ChatRoomViewController {
         )
         tableView.backgroundColor = Resources.Colors.lineBackground
         tableView.separatorStyle = .none
+        tableView.allowsSelection = false
         tableView.estimatedRowHeight = 80
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.contentInset = Constants.contentInset
-        tableView.scrollIndicatorInsets = Constants.contentInset
-        tableView.transform = .init(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
+        tableView.transform = .init(scaleX: 1, y: -1)
         tableView.keyboardDismissMode = .onDrag
     }
 
@@ -151,7 +147,7 @@ private extension ChatRoomViewController {
         {
             guard endFrame.height >= Constants.accessoryHeight else { return }
 
-            let top = endFrame.height - safeAreaBottom
+            let top = endFrame.height
             let contentInset = UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
 
             tableView.contentInset = contentInset
@@ -161,8 +157,8 @@ private extension ChatRoomViewController {
     }
 
     @objc func keyboardWillHide() {
-        tableView.contentInset = Constants.contentInset
-        tableView.scrollIndicatorInsets = Constants.contentInset
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        tableView.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
 
