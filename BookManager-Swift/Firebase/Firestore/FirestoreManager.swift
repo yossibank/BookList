@@ -157,7 +157,7 @@ final class FirestoreManager {
     ) {
         guard
             let chatMessage = ChatMessage(
-                id: Int(user.id) ?? 0,
+                id: user.id,
                 name: user.name,
                 iconUrl: user.imageUrl,
                 message: message,

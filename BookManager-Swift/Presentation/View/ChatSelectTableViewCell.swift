@@ -8,8 +8,7 @@ final class ChatSelectTableViewCell: UITableViewCell {
     )
 
     private let userInfoStackView: UIStackView = .init(
-        style: .verticalStyle,
-        spacing: 10
+        style: .verticalStyle
     )
 
     private let userIconImageView: UIImageView = .init(
@@ -95,7 +94,7 @@ private extension ChatSelectTableViewCell {
         }
 
         sendTimeLabel.layout {
-            $0.top == topAnchor - 10
+            $0.top == topAnchor + 10
             $0.trailing == trailingAnchor - 10
         }
     }

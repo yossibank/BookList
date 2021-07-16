@@ -1,7 +1,7 @@
 import Foundation
 
 struct ChatMessage: FirebaseModelProtocol & Equatable {
-    var id: Int
+    var id: String
     var name: String
     var iconUrl: String
     var message: String
