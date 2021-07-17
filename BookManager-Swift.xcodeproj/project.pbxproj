@@ -19,6 +19,7 @@
 		780F6B9C2682C656002D7513 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 780F6B9B2682C656002D7513 /* FirebaseAuth */; };
 		781936B325BC5B2B00309FB7 /* BookFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781936B225BC5B2B00309FB7 /* BookFileManager.swift */; };
 		781936C025BC752D00309FB7 /* BookBusinessModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781936BF25BC752D00309FB7 /* BookBusinessModel.swift */; };
+		7819417126A2A4F800E3E2AF /* FirebaseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7819417026A2A4F800E3E2AF /* FirebaseKit */; };
 		781CC3A12658E6E00075D260 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 781CC3A02658E6E00075D260 /* RxSwift */; };
 		781CC3A52658E6E00075D260 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 781CC3A42658E6E00075D260 /* RxRelay */; };
 		781CC3A72658E6E00075D260 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 781CC3A62658E6E00075D260 /* RxCocoa */; };
@@ -234,6 +235,7 @@
 		789BC9372684599400C9EC0F /* NotificationName+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Util.swift"; sourceTree = "<group>"; };
 		789BC93926845A8C00C9EC0F /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		789BC93B26845C0900C9EC0F /* UITextField+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Combine.swift"; sourceTree = "<group>"; };
+		78AB825126A2A3B10029D522 /* FirebaseKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FirebaseKit; path = "BookManager-Swift/FirebaseKit"; sourceTree = SOURCE_ROOT; };
 		78B29D0025B3124A00A7DC7F /* BookTitleValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTitleValidator.swift; sourceTree = "<group>"; };
 		78B29D1B25B3310000A7DC7F /* EditBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookViewController.swift; sourceTree = "<group>"; };
 		78B2A162267B7F6B00D9EA0E /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				780F6B982682C656002D7513 /* FirebaseStorage in Frameworks */,
 				78EB164F267620CE00777F32 /* APIKit in Frameworks */,
 				780F6B922682C656002D7513 /* FirebaseFirestoreSwift-Beta in Frameworks */,
+				7819417126A2A4F800E3E2AF /* FirebaseKit in Frameworks */,
 				78DC0BA2267B92F10085F5E7 /* CombineCocoa in Frameworks */,
 				78B6B4D82658EA3000AE45E5 /* KeychainAccess in Frameworks */,
 			);
@@ -320,6 +323,13 @@
 				7826A73C25F7A885006F23AD /* ChatUserListViewModel.swift */,
 			);
 			path = ChatUserList;
+			sourceTree = "<group>";
+		};
+		7819416F26A2A4F800E3E2AF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		781B121B25E69A75006968ED /* OtherMessageCell */ = {
@@ -354,6 +364,7 @@
 				782311F8259C0D9200D9E723 /* BookManager-Swift */,
 				7823120F259C0D9300D9E723 /* BookManager-SwiftTests */,
 				782311F7259C0D9200D9E723 /* Products */,
+				7819416F26A2A4F800E3E2AF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -370,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				78EB164D2676201C00777F32 /* APIKit */,
+				78AB825126A2A3B10029D522 /* FirebaseKit */,
 				78FFC6972678F8F300957F9C /* DomainKit */,
 				782E636B2675DC7A0029E940 /* Utility */,
 				78FE8CD0267B73FE0006612E /* Configuration */,
@@ -838,6 +850,7 @@
 				780F6B992682C656002D7513 /* FirebaseCrashlytics */,
 				780F6B9B2682C656002D7513 /* FirebaseAuth */,
 				78F675502684CF6C009E117D /* Nuke */,
+				7819417026A2A4F800E3E2AF /* FirebaseKit */,
 			);
 			productName = Collections;
 			productReference = 782311F6259C0D9200D9E723 /* BookManager-Swift.app */;
@@ -1406,6 +1419,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 780F6B8E2682C656002D7513 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		7819417026A2A4F800E3E2AF /* FirebaseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseKit;
 		};
 		781CC3A02658E6E00075D260 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
