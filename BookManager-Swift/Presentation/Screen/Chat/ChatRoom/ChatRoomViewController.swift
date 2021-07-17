@@ -123,7 +123,7 @@ private extension ChatRoomViewController {
                 case .added:
                     self.dataSource.chatMessages.insert(chatMessage, at: 0)
                     self.dataSource.chatMessages
-                        .sort { $0.sendAt.dateValue() > $1.sendAt.dateValue() }
+                        .sort { $0.sendAt ?? Date() > $1.sendAt ?? Date() }
 
                 case .modified, .removed: break
             }

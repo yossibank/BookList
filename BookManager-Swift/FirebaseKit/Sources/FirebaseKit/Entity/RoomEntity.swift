@@ -1,11 +1,11 @@
 import Foundation
 
 public struct RoomEntity: FirebaseEntityProtocol & Equatable {
-    let id: String
-    let users: [UserEntity]
-    let lastMessage: String?
-    let lastMessageSendAt: Date?
-    let createdAt: Date
+    public let id: String
+    public let users: [AccountEntity]
+    public let lastMessage: String?
+    public let lastMessageSendAt: Date?
+    public let createdAt: Date
 
     static let collectionName = "rooms"
 }

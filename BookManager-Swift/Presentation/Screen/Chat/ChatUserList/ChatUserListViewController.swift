@@ -2,6 +2,9 @@ import UIKit
 import Combine
 import CombineCocoa
 
+// temporary
+import FirebaseKit
+
 extension ChatUserListViewController: VCInjectable {
     typealias R = NoRouting
     typealias VM = ChatUserListViewModel
@@ -17,7 +20,7 @@ final class ChatUserListViewController: UIViewController {
         frame: .zero
     )
 
-    private var selectedUser: User?
+    private var selectedUser: AccountEntity?
     private var dataSource: ChatUserListDataSource!
     private var cancellables: Set<AnyCancellable> = []
 }

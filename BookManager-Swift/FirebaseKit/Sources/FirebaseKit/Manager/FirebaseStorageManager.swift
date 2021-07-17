@@ -17,7 +17,7 @@ public struct FirebaseStorageManager {
         return metaData
     }()
 
-    static func saveUserIconImage(
+    public static func saveUserIconImage(
         path: String,
         uploadImage: Data
     ) {
@@ -32,7 +32,7 @@ public struct FirebaseStorageManager {
         }
     }
 
-    static func fetchDownloadUrlString(path: String, completion: @escaping (String) -> Void) {
+    public static func fetchDownloadUrlString(path: String, completion: @escaping (String) -> Void) {
         reference.child(Constant.userIconPath).child(path).downloadURL { url, error in
             if let error = error {
                 Logger.debug(message: error.localizedDescription)

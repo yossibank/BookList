@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class ChatSelectRouting: Routing {
     weak var viewController: UIViewController?
 }
@@ -17,7 +20,7 @@ extension ChatSelectRouting {
         viewController?.present(navVC, animated: true)
     }
 
-    func showChatRoomScreen(roomId: String, user: User) {
+    func showChatRoomScreen(roomId: String, user: AccountEntity) {
         let chatRoomVC = Resources.ViewControllers.App.chatRoom(roomId: roomId, user: user)
         let navVC = viewController?.navigationController as? RootNavigationController
 

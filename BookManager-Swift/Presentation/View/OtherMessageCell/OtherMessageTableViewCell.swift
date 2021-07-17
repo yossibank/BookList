@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class OtherMessageTableViewCell: UITableViewCell {
 
     @IBOutlet var userIconImageView: UIImageView!
@@ -35,8 +38,8 @@ final class OtherMessageTableViewCell: UITableViewCell {
         )
     }
 
-    func setup(chat: ChatMessage) {
-        let sendAt = chat.sendAt.dateValue().toConvertString(
+    func setup(chat: MessageEntity) {
+        let sendAt = chat.sendAt?.toConvertString(
             with: .hourToMinitue
         )
 

@@ -3,24 +3,24 @@ import Utility
 
 public class FirebaseAuthManager {
 
-    typealias CurrentUser = FirebaseAuth.User
+    public typealias CurrentUser = FirebaseAuth.User
 
-    static let shared = FirebaseAuthManager()
+    public static let shared = FirebaseAuthManager()
 
-    var currentUser: CurrentUser? {
+    public var currentUser: CurrentUser? {
         Auth.auth().currentUser
     }
 
-    var currentUserId: String {
+    public var currentUserId: String {
         currentUser?.uid ?? ""
     }
 
     private init() {}
 
-    func createUser(
+    public func createUser(
         email: String,
         password: String,
-        user: UserEntity
+        user: AccountEntity
     ) {
         Auth.auth().createUser(
             withEmail: email,
@@ -38,7 +38,7 @@ public class FirebaseAuthManager {
         }
     }
 
-    func signIn(
+    public func signIn(
         email: String,
         password: String
     ) {
@@ -55,7 +55,7 @@ public class FirebaseAuthManager {
         }
     }
 
-    func logout() {
+    public func logout() {
         if Auth.auth().currentUser != nil {
             do {
                 try Auth.auth().signOut()

@@ -1,7 +1,10 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class ChatSelectDataSource: NSObject {
-    var roomList: [Room] = []
+    var roomList: [RoomEntity] = []
 }
 
 extension ChatSelectDataSource: UITableViewDataSource {

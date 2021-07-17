@@ -1,13 +1,15 @@
+import FirebaseKit
+
 final class ChatRoomViewModel: ViewModel {
     private let roomId: String
-    private let user: User
+    private let user: AccountEntity
     private let firestore = FirestoreManager.shared
 
     var currentUserId: String {
         user.id
     }
 
-    init(roomId: String, user: User) {
+    init(roomId: String, user: AccountEntity) {
         self.roomId = roomId
         self.user = user
     }
@@ -17,7 +19,7 @@ final class ChatRoomViewModel: ViewModel {
     }
 
     func fetchChatMessages(
-        completion: @escaping ((FirestoreManager.documentChange, ChatMessage) -> Void)
+        completion: @escaping ((FirestoreManager.documentChange, MessageEntity) -> Void)
     ) {
         firestore.fetchChatMessages(
             roomId: roomId,

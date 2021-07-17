@@ -3,6 +3,9 @@ import DomainKit
 import Foundation
 import Utility
 
+// temporary
+import FirebaseKit
+
 final class LoginViewModel: ViewModel {
     typealias State = LoadingState<UserEntity, APPError>
 

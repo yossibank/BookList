@@ -3,27 +3,27 @@ import FirebaseFirestore
 
 public class FirestoreManager {
 
-    typealias documentChange = DocumentChange
+    public typealias documentChange = DocumentChange
 
     private let database = Firestore.firestore()
     private var listner: ListenerRegistration?
     private var cancellables: Set<AnyCancellable> = []
 
-    static let shared = FirestoreManager()
+    public static let shared = FirestoreManager()
 
     private init() {}
 
-    func removeListner() {
+    public func removeListner() {
         listner?.remove()
     }
 
     // MARK: - Access for User
-    func createUser(
+    public func createUser(
         documentPath: String,
-        user: UserEntity
+        user: AccountEntity
     ) {
         guard
-            let user = UserEntity(
+            let user = AccountEntity(
                 id: user.id,
                 name: user.name,
                 email: user.email,
@@ -35,7 +35,7 @@ public class FirestoreManager {
         }
 
         database
-            .collection(UserEntity.collectionName)
+            .collection(AccountEntity.collectionName)
             .document(documentPath)
             .setData(user) { error in
                 if let error = error {
@@ -44,12 +44,12 @@ public class FirestoreManager {
             }
     }
 
-    func findUser(
+    public func findUser(
         documentPath: String,
-        completion: @escaping (UserEntity) -> Void
+        completion: @escaping (AccountEntity) -> Void
     ) {
         database
-            .collection(UserEntity.collectionName)
+            .collection(AccountEntity.collectionName)
             .document(documentPath)
             .getDocument { querySnapshot, error in
                 if let error = error {
@@ -60,7 +60,7 @@ public class FirestoreManager {
                 guard
                     let querySanpshot = querySnapshot,
                     let data = querySanpshot.data(),
-                    let user = UserEntity.initialize(json: data)
+                    let user = AccountEntity.initialize(json: data)
                 else {
                     return
                 }
@@ -68,11 +68,11 @@ public class FirestoreManager {
             }
     }
 
-    func fetchUsers() -> AnyPublisher<[UserEntity], Error>  {
+    public func fetchUsers() -> AnyPublisher<[AccountEntity], Error>  {
         Deferred {
-            Future<[UserEntity], Error> { promise in
+            Future<[AccountEntity], Error> { promise in
                 self.database
-                    .collection(UserEntity.collectionName)
+                    .collection(AccountEntity.collectionName)
                     .getDocuments { querySnapshot, error in
                         if let error = error {
                             promise(.failure(error))
@@ -86,7 +86,7 @@ public class FirestoreManager {
                         }
 
                         let users = querySnapshot.documents
-                            .compactMap { UserEntity.initialize(json: $0.data()) }
+                            .compactMap { AccountEntity.initialize(json: $0.data()) }
                             .filter { $0.email != FirebaseAuthManager.shared.currentUser?.email }
 
                         promise(.success(users))
@@ -96,7 +96,7 @@ public class FirestoreManager {
     }
 
     // MARK: - Access for Room
-    func createRoom(partnerUser: UserEntity) {
+    public func createRoom(partnerUser: AccountEntity) {
         findUser(documentPath: FirebaseAuthManager.shared.currentUserId) { [weak self] user in
             guard
                 let self = self,
@@ -123,7 +123,7 @@ public class FirestoreManager {
         }
     }
 
-    func fetchRooms(
+    public func fetchRooms(
         completion: @escaping ((DocumentChange, RoomEntity) -> Void)
     ) {
         listner = database
@@ -148,9 +148,9 @@ public class FirestoreManager {
     }
 
     // MARK: - Access for ChatMessage
-    func createChatMessage(
+    public func createChatMessage(
         roomId: String,
-        user: UserEntity,
+        user: AccountEntity,
         message: String
     ) {
         guard
@@ -191,7 +191,7 @@ public class FirestoreManager {
             }
     }
 
-    func fetchChatMessages(
+    public func fetchChatMessages(
         roomId: String,
         completion: @escaping ((DocumentChange, MessageEntity) -> Void)
     ) {

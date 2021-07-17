@@ -1,11 +1,11 @@
 import Foundation
 
 public struct MessageEntity: FirebaseEntityProtocol & Equatable {
-    let id: String
-    let name: String
-    let iconUrl: String
-    let message: String
-    let sendAt: Date?
+    public let id: String
+    public let name: String
+    public let iconUrl: String
+    public let message: String
+    public let sendAt: Date?
 
     static let collecitonName = "chatMessages"
 }
