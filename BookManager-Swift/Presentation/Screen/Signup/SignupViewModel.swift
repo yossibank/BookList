@@ -3,6 +3,9 @@ import DomainKit
 import Foundation
 import Utility
 
+// temporary
+import FirebaseKit
+
 final class SignupViewModel: ViewModel {
     typealias State = LoadingState<UserEntity, APPError>
 
@@ -83,7 +86,7 @@ extension SignupViewModel {
         FirebaseStorageManager.fetchDownloadUrlString(path: id) { [weak self] imageUrl in
             guard let self = self else { return }
 
-            let user = User(
+            let user = AccountEntity(
                 id: self.id,
                 name: self.userName,
                 email: self.email,
@@ -91,7 +94,7 @@ extension SignupViewModel {
                 createdAt: Date()
             )
 
-            FirebaseAuthManager.shared.createUser(
+            FirebaseAuthManager.createUser(
                 email: self.email,
                 password: self.password,
                 user: user

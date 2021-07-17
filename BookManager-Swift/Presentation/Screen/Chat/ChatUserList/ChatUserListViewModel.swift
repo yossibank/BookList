@@ -2,10 +2,13 @@ import Combine
 import DomainKit
 import Utility
 
-final class ChatUserListViewModel: ViewModel {
-    typealias State = LoadingState<[User], APPError>
+// temporary
+import FirebaseKit
 
-    private(set) var userList: [User] = []
+final class ChatUserListViewModel: ViewModel {
+    typealias State = LoadingState<[AccountEntity], APPError>
+
+    private(set) var userList: [AccountEntity] = []
 
     @Published private(set) var state: State = .standby
 
@@ -14,7 +17,7 @@ final class ChatUserListViewModel: ViewModel {
     func fetchUsers() {
         state = .loading
 
-        FirestoreManager.shared.fetchUsers()
+        FirestoreManager.fetchUsers()
             .sink { completion in
                 switch completion {
                     case .failure:
@@ -31,7 +34,7 @@ final class ChatUserListViewModel: ViewModel {
             .store(in: &cancellables)
     }
 
-    func createRoom(partnerUser: User) {
-        FirestoreManager.shared.createRoom(partnerUser: partnerUser)
+    func createRoom(partnerUser: AccountEntity) {
+        FirestoreManager.createRoom(partnerUser: partnerUser)
     }
 }

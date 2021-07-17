@@ -1,20 +1,21 @@
+// temporary
+import FirebaseKit
+
 final class ChatSelectViewModel: ViewModel {
 
-    private let firestore = FirestoreManager.shared
-
     func removeListener() {
-        firestore.removeListner()
+        FirestoreManager.removeListner()
     }
 
     func fetchRooms(
-        completion: @escaping ((FirestoreManager.documentChange, Room) -> Void)
+        completion: @escaping ((FirestoreManager.documentChange, RoomEntity) -> Void)
     ) {
-        firestore.fetchRooms(completion: completion)
+        FirestoreManager.fetchRooms(completion: completion)
     }
 
-    func findUser(completion: @escaping (User) -> Void) {
-        firestore.findUser(
-            documentPath: FirebaseAuthManager.shared.currentUserId,
+    func findUser(completion: @escaping (AccountEntity) -> Void) {
+        FirestoreManager.findUser(
+            documentPath: FirebaseAuthManager.currentUser?.uid ?? String.blank,
             completion: completion
         )
     }

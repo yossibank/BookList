@@ -1,7 +1,10 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class ChatRoomDataSource: NSObject {
-    var chatMessages: [ChatMessage] = []
+    var chatMessages: [MessageEntity] = []
     weak var viewModel: ChatRoomViewModel?
 
     init(viewModel: ChatRoomViewModel) {

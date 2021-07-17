@@ -1,32 +1,33 @@
+import FirebaseKit
+
 final class ChatRoomViewModel: ViewModel {
     private let roomId: String
-    private let user: User
-    private let firestore = FirestoreManager.shared
+    private let user: AccountEntity
 
     var currentUserId: String {
         user.id
     }
 
-    init(roomId: String, user: User) {
+    init(roomId: String, user: AccountEntity) {
         self.roomId = roomId
         self.user = user
     }
 
     func removeListener() {
-        firestore.removeListner()
+        FirestoreManager.removeListner()
     }
 
     func fetchChatMessages(
-        completion: @escaping ((FirestoreManager.documentChange, ChatMessage) -> Void)
+        completion: @escaping ((FirestoreManager.documentChange, MessageEntity) -> Void)
     ) {
-        firestore.fetchChatMessages(
+        FirestoreManager.fetchChatMessages(
             roomId: roomId,
             completion: completion
         )
     }
 
     func sendChatMessage(message: String) {
-        firestore.createChatMessage(
+        FirestoreManager.createChatMessage(
             roomId: roomId,
             user: user,
             message: message

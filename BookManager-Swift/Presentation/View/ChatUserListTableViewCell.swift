@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class ChatUserListTableViewCell: UITableViewCell {
 
     private let stackView: UIStackView = .init(
@@ -32,7 +35,7 @@ final class ChatUserListTableViewCell: UITableViewCell {
 
 extension ChatUserListTableViewCell {
 
-    func setup(user: User) {
+    func setup(user: AccountEntity) {
         userNameLabel.text = user.name
         userIconImageView.loadImage(with: .string(urlString: user.imageUrl))
     }

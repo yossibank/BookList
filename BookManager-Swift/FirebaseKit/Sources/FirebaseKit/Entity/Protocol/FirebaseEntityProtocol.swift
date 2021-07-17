@@ -2,11 +2,11 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Utility
 
-protocol FirebaseModelProtocol: Codable {
+public protocol FirebaseEntityProtocol: Codable {
     func toDictionary() -> [String: Any]?
 }
 
-extension FirebaseModelProtocol {
+public extension FirebaseEntityProtocol {
 
     static func initialize(json: [String: Any]) -> Self? {
         do {

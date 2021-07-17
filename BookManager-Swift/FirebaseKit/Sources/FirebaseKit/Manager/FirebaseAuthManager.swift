@@ -1,27 +1,20 @@
 import FirebaseAuth
-import DomainKit
 import Utility
 
-final class FirebaseAuthManager {
+public struct FirebaseAuthManager {
 
-    typealias CurrentUser = FirebaseAuth.User
+    public typealias CurrentUser = FirebaseAuth.User
 
-    static let shared = FirebaseAuthManager()
-
-    var currentUser: CurrentUser? {
+    public static var currentUser: CurrentUser? {
         Auth.auth().currentUser
-    }
-
-    var currentUserId: String {
-        currentUser?.uid ?? .blank
     }
 
     private init() {}
 
-    func createUser(
+    public static func createUser(
         email: String,
         password: String,
-        user: User
+        user: AccountEntity
     ) {
         Auth.auth().createUser(
             withEmail: email,
@@ -29,7 +22,7 @@ final class FirebaseAuthManager {
         ) { result, error in
             guard let result = result else { return }
 
-            FirestoreManager.shared.createUser(
+            FirestoreManager.createUser(
                 documentPath: result.user.uid,
                 user: user
             )
@@ -39,7 +32,7 @@ final class FirebaseAuthManager {
         }
     }
 
-    func signIn(
+    public static func signIn(
         email: String,
         password: String
     ) {
@@ -56,7 +49,7 @@ final class FirebaseAuthManager {
         }
     }
 
-    func logout() {
+    public static func logout() {
         if Auth.auth().currentUser != nil {
             do {
                 try Auth.auth().signOut()

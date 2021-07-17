@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class ChatSelectTableViewCell: UITableViewCell {
 
     private let mainStackView: UIStackView = .init(
@@ -45,12 +48,12 @@ final class ChatSelectTableViewCell: UITableViewCell {
 
 extension ChatSelectTableViewCell {
 
-    func setup(room: Room) {
+    func setup(room: RoomEntity) {
         let partnerUser = room.users.filter {
-            $0.email != FirebaseAuthManager.shared.currentUser?.email
+            $0.email != FirebaseAuthManager.currentUser?.email
         }.first
 
-        let lastMessageSendAt = room.lastMessageSendAt?.dateValue().toConvertString(
+        let lastMessageSendAt = room.lastMessageSendAt?.toConvertString(
             with: .hourToMinitue
         )
 

@@ -3,6 +3,9 @@ import DomainKit
 import Foundation
 import Utility
 
+// temporary
+import FirebaseKit
+
 final class LoginViewModel: ViewModel {
     typealias State = LoadingState<UserEntity, APPError>
 
@@ -52,7 +55,7 @@ extension LoginViewModel {
 
                     case .finished:
                         Logger.debug(message: "finished")
-                        FirebaseAuthManager.shared.signIn(
+                        FirebaseAuthManager.signIn(
                             email: self.email,
                             password: self.password
                         )

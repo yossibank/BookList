@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 final class MyMessageTableViewCell: UITableViewCell {
 
     @IBOutlet var userMessageTextView: UITextView! {
@@ -31,8 +34,8 @@ final class MyMessageTableViewCell: UITableViewCell {
         )
     }
 
-    func setup(chat: ChatMessage) {
-        let sendAt = chat.sendAt.dateValue().toConvertString(
+    func setup(chat: MessageEntity) {
+        let sendAt = chat.sendAt?.toConvertString(
             with: .hourToMinitue
         )
 

@@ -1,5 +1,8 @@
 import UIKit
 
+// temporary
+import FirebaseKit
+
 extension Resources {
 
     static var ViewControllers: ViewController {
@@ -71,7 +74,7 @@ extension Resources {
                 return vc
             }
 
-            func chatRoom(roomId: String, user: User) -> ChatRoomViewController {
+            func chatRoom(roomId: String, user: AccountEntity) -> ChatRoomViewController {
                 let vc = ChatRoomViewController()
                 vc.inject(
                     routing: NoRouting(),
