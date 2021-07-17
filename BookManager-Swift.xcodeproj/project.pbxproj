@@ -376,11 +376,9 @@
 				78997EBA259C346B0076FF97 /* Presentation */,
 				78FE8CD7267B79480006612E /* Resource */,
 				78997EC2259C350B0076FF97 /* Utility */,
-				7862C15225E2591800F1645A /* Firebase */,
-				781936B225BC5B2B00309FB7 /* BookFileManager.swift */,
+				78B2A169267B87B600D9EA0E /* Before */,
 				78231207259C0D9300D9E723 /* Info.plist */,
 				78D18A87265E251500396D19 /* GoogleService-Info.plist */,
-				78B2A169267B87B600D9EA0E /* Before */,
 			);
 			path = "BookManager-Swift";
 			sourceTree = "<group>";
@@ -688,6 +686,8 @@
 		78B2A169267B87B600D9EA0E /* Before */ = {
 			isa = PBXGroup;
 			children = (
+				781936B225BC5B2B00309FB7 /* BookFileManager.swift */,
+				7862C15225E2591800F1645A /* Firebase */,
 				7892EF48259C539B006F7315 /* IBDesignable */,
 			);
 			path = Before;
