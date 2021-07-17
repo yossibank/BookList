@@ -22,7 +22,7 @@ public struct FirebaseAuthManager {
         ) { result, error in
             guard let result = result else { return }
 
-            FirestoreManager.shared.createUser(
+            FirestoreManager.createUser(
                 documentPath: result.user.uid,
                 user: user
             )

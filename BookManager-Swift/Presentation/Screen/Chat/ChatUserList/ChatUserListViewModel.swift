@@ -17,7 +17,7 @@ final class ChatUserListViewModel: ViewModel {
     func fetchUsers() {
         state = .loading
 
-        FirestoreManager.shared.fetchUsers()
+        FirestoreManager.fetchUsers()
             .sink { completion in
                 switch completion {
                     case .failure:
@@ -35,6 +35,6 @@ final class ChatUserListViewModel: ViewModel {
     }
 
     func createRoom(partnerUser: AccountEntity) {
-        FirestoreManager.shared.createRoom(partnerUser: partnerUser)
+        FirestoreManager.createRoom(partnerUser: partnerUser)
     }
 }

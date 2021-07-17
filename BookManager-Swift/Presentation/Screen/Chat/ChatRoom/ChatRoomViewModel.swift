@@ -3,7 +3,6 @@ import FirebaseKit
 final class ChatRoomViewModel: ViewModel {
     private let roomId: String
     private let user: AccountEntity
-    private let firestore = FirestoreManager.shared
 
     var currentUserId: String {
         user.id
@@ -15,20 +14,20 @@ final class ChatRoomViewModel: ViewModel {
     }
 
     func removeListener() {
-        firestore.removeListner()
+        FirestoreManager.removeListner()
     }
 
     func fetchChatMessages(
         completion: @escaping ((FirestoreManager.documentChange, MessageEntity) -> Void)
     ) {
-        firestore.fetchChatMessages(
+        FirestoreManager.fetchChatMessages(
             roomId: roomId,
             completion: completion
         )
     }
 
     func sendChatMessage(message: String) {
-        firestore.createChatMessage(
+        FirestoreManager.createChatMessage(
             roomId: roomId,
             user: user,
             message: message

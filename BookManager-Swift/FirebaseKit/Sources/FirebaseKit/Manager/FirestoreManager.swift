@@ -1,24 +1,22 @@
 import Combine
 import FirebaseFirestore
 
-public class FirestoreManager {
+public struct FirestoreManager {
 
     public typealias documentChange = DocumentChange
 
-    private let database = Firestore.firestore()
-    private var listner: ListenerRegistration?
+    private static let database = Firestore.firestore()
+    private static var listner: ListenerRegistration?
     private var cancellables: Set<AnyCancellable> = []
-
-    public static let shared = FirestoreManager()
 
     private init() {}
 
-    public func removeListner() {
+    public static func removeListner() {
         listner?.remove()
     }
 
     // MARK: - Access for User
-    public func createUser(
+    public static func createUser(
         documentPath: String,
         user: AccountEntity
     ) {
@@ -44,7 +42,7 @@ public class FirestoreManager {
             }
     }
 
-    public func findUser(
+    public static func findUser(
         documentPath: String,
         completion: @escaping (AccountEntity) -> Void
     ) {
@@ -68,7 +66,7 @@ public class FirestoreManager {
             }
     }
 
-    public func fetchUsers() -> AnyPublisher<[AccountEntity], Error>  {
+    public static func fetchUsers() -> AnyPublisher<[AccountEntity], Error>  {
         Deferred {
             Future<[AccountEntity], Error> { promise in
                 self.database
@@ -96,10 +94,9 @@ public class FirestoreManager {
     }
 
     // MARK: - Access for Room
-    public func createRoom(partnerUser: AccountEntity) {
-        findUser(documentPath: FirebaseAuthManager.currentUser?.uid ?? "") { [weak self] user in
+    public static func createRoom(partnerUser: AccountEntity) {
+        findUser(documentPath: FirebaseAuthManager.currentUser?.uid ?? "") { user in
             guard
-                let self = self,
                 let data = RoomEntity(
                     id: "\(user.id)\(partnerUser.id)",
                     users: [user, partnerUser],
@@ -123,7 +120,7 @@ public class FirestoreManager {
         }
     }
 
-    public func fetchRooms(
+    public static func fetchRooms(
         completion: @escaping ((DocumentChange, RoomEntity) -> Void)
     ) {
         listner = database
@@ -148,7 +145,7 @@ public class FirestoreManager {
     }
 
     // MARK: - Access for ChatMessage
-    public func createChatMessage(
+    public static func createChatMessage(
         roomId: String,
         user: AccountEntity,
         message: String
@@ -191,7 +188,7 @@ public class FirestoreManager {
             }
     }
 
-    public func fetchChatMessages(
+    public static func fetchChatMessages(
         roomId: String,
         completion: @escaping ((DocumentChange, MessageEntity) -> Void)
     ) {
