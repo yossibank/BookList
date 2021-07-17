@@ -94,7 +94,7 @@ extension SignupViewModel {
                 createdAt: Date()
             )
 
-            FirebaseAuthManager.shared.createUser(
+            FirebaseAuthManager.createUser(
                 email: self.email,
                 password: self.password,
                 user: user

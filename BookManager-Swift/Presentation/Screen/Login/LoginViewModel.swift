@@ -55,7 +55,7 @@ extension LoginViewModel {
 
                     case .finished:
                         Logger.debug(message: "finished")
-                        FirebaseAuthManager.shared.signIn(
+                        FirebaseAuthManager.signIn(
                             email: self.email,
                             password: self.password
                         )

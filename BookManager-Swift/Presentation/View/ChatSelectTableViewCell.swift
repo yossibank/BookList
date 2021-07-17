@@ -50,7 +50,7 @@ extension ChatSelectTableViewCell {
 
     func setup(room: RoomEntity) {
         let partnerUser = room.users.filter {
-            $0.email != FirebaseAuthManager.shared.currentUser?.email
+            $0.email != FirebaseAuthManager.currentUser?.email
         }.first
 
         let lastMessageSendAt = room.lastMessageSendAt?.toConvertString(

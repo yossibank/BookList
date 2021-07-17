@@ -1,23 +1,17 @@
 import FirebaseAuth
 import Utility
 
-public class FirebaseAuthManager {
+public struct FirebaseAuthManager {
 
     public typealias CurrentUser = FirebaseAuth.User
 
-    public static let shared = FirebaseAuthManager()
-
-    public var currentUser: CurrentUser? {
+    public static var currentUser: CurrentUser? {
         Auth.auth().currentUser
-    }
-
-    public var currentUserId: String {
-        currentUser?.uid ?? ""
     }
 
     private init() {}
 
-    public func createUser(
+    public static func createUser(
         email: String,
         password: String,
         user: AccountEntity
@@ -38,7 +32,7 @@ public class FirebaseAuthManager {
         }
     }
 
-    public func signIn(
+    public static func signIn(
         email: String,
         password: String
     ) {
@@ -55,7 +49,7 @@ public class FirebaseAuthManager {
         }
     }
 
-    public func logout() {
+    public static func logout() {
         if Auth.auth().currentUser != nil {
             do {
                 try Auth.auth().signOut()

@@ -87,7 +87,7 @@ public class FirestoreManager {
 
                         let users = querySnapshot.documents
                             .compactMap { AccountEntity.initialize(json: $0.data()) }
-                            .filter { $0.email != FirebaseAuthManager.shared.currentUser?.email }
+                            .filter { $0.email != FirebaseAuthManager.currentUser?.email }
 
                         promise(.success(users))
                     }
@@ -97,7 +97,7 @@ public class FirestoreManager {
 
     // MARK: - Access for Room
     public func createRoom(partnerUser: AccountEntity) {
-        findUser(documentPath: FirebaseAuthManager.shared.currentUserId) { [weak self] user in
+        findUser(documentPath: FirebaseAuthManager.currentUser?.uid ?? "") { [weak self] user in
             guard
                 let self = self,
                 let data = RoomEntity(

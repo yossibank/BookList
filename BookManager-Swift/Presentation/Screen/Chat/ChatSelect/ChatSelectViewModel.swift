@@ -17,7 +17,7 @@ final class ChatSelectViewModel: ViewModel {
 
     func findUser(completion: @escaping (AccountEntity) -> Void) {
         firestore.findUser(
-            documentPath: FirebaseAuthManager.shared.currentUserId,
+            documentPath: FirebaseAuthManager.currentUser?.uid ?? String.blank,
             completion: completion
         )
     }
