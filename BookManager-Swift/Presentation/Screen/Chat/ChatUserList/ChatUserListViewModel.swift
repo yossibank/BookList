@@ -1,40 +1,37 @@
-import RxSwift
-import RxRelay
+import Combine
+import DomainKit
+import Utility
 
 final class ChatUserListViewModel: ViewModel {
-    private let usecase: ChatUserListUsecase!
-    private let userListRelay: BehaviorRelay<[User]> = BehaviorRelay(value: [])
-    private let errorRelay: BehaviorRelay<Error?> = BehaviorRelay(value: nil)
-    private let disposeBag = DisposeBag()
+    typealias State = LoadingState<[User], APPError>
 
-    var userList: Observable<[User]> {
-        userListRelay.asObservable()
-    }
+    private(set) var userList: [User] = []
 
-    var error: Observable<Error?> {
-        errorRelay.asObservable()
-    }
+    @Published private(set) var state: State = .standby
 
-    init(usecase: ChatUserListUsecase) {
-        self.usecase = usecase
-        bindUsecase()
-    }
+    private var cancellables: Set<AnyCancellable> = []
 
-    private func bindUsecase() {
-        usecase.userList
-            .bind(to: userListRelay)
-            .disposed(by: disposeBag)
+    func fetchUsers() {
+        state = .loading
 
-        usecase.error
-            .bind(to: errorRelay)
-            .disposed(by: disposeBag)
+        FirestoreManager.shared.fetchUsers()
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        print("error")
+
+                    case .finished:
+                        print("finished")
+                }
+            } receiveValue: { [weak self] state in
+                guard let self = self else { return }
+                self.userList.append(contentsOf: state)
+                self.state = .done(state)
+            }
+            .store(in: &cancellables)
     }
 
     func createRoom(partnerUser: User) {
         FirestoreManager.shared.createRoom(partnerUser: partnerUser)
-    }
-
-    func fetchUsers() {
-        usecase.fetchUserList()
     }
 }

@@ -33,6 +33,7 @@ extension ChatUserListViewController {
         setupLayout()
         setupNavigationItem()
         setupTableView()
+        bindViewModel()
     }
 }
 
@@ -72,7 +73,7 @@ private extension ChatUserListViewController {
     }
 
     func setupTableView() {
-        dataSource = ChatUserListDataSource()
+        dataSource = ChatUserListDataSource(viewModel: viewModel)
         tableView.dataSource = dataSource
 
         tableView.register(
@@ -82,6 +83,27 @@ private extension ChatUserListViewController {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.rowHeight = 80
+    }
+
+    func bindViewModel() {
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                    case .standby:
+                        print("standby")
+
+                    case .loading:
+                        print("loading")
+
+                    case .done:
+                        self?.tableView.reloadData()
+
+                    case let .failed(error):
+                        self?.showError(error: error)
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -96,7 +118,7 @@ extension ChatUserListViewController: UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         navigationItem.rightBarButtonItem?.isEnabled = true
 
-        if let user = dataSource.chatUserList.any(at: indexPath.row) {
+        if let user = viewModel.userList.any(at: indexPath.row) {
             selectedUser = user
         }
     }

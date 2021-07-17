@@ -2,6 +2,11 @@ import UIKit
 
 final class ChatUserListTableViewCell: UITableViewCell {
 
+    private let stackView: UIStackView = .init(
+        style: .horizontalStyle,
+        spacing: 10
+    )
+
     private let userIconImageView: UIImageView = .init(
         style: .userIconStyle
     )
@@ -39,21 +44,23 @@ private extension ChatUserListTableViewCell {
 
     func setupView() {
         backgroundColor = .white
-        contentView.addSubview(userIconImageView)
-        contentView.addSubview(userNameLabel)
+
+        [userIconImageView, userNameLabel].forEach {
+            stackView.addArrangedSubview($0)
+        }
+
+        contentView.addSubview(stackView)
     }
 
     func setupLayout() {
-        userIconImageView.layout {
+        stackView.layout {
             $0.centerY == centerYAnchor
-            $0.leading == leadingAnchor + 10
-            $0.widthConstant == 60
-            $0.heightConstant == 60
+            $0.leading == leadingAnchor + 20
         }
 
-        userNameLabel.layout {
-            $0.centerY == centerYAnchor
-            $0.leading == userIconImageView.rightAnchor + 15
+        userIconImageView.layout {
+            $0.widthConstant == 60
+            $0.heightConstant == 60
         }
     }
 }

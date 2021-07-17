@@ -1,5 +1,6 @@
 import FirebaseFirestore
 import RxSwift
+import Combine
 
 final class FirestoreManager {
 
@@ -8,6 +9,7 @@ final class FirestoreManager {
 
     private let database = Firestore.firestore()
     private var listner: ListenerRegistration?
+    private var cancellables: Set<AnyCancellable> = []
 
     static let shared = FirestoreManager()
 
@@ -68,32 +70,31 @@ final class FirestoreManager {
             }
     }
 
-    func fetchUsers() -> Single<[User]> {
-        Single.create(subscribe: { [weak self] observer -> Disposable in
-            self?.database
-                .collection(User.collectionName)
-                .getDocuments { querySnapshot, error in
-                    if let error = error {
-                        print("user情報の取得に失敗しました: \(error)")
-                        observer(.failure(error))
-                        return
+    func fetchUsers() -> AnyPublisher<[User], Error>  {
+        Deferred {
+            Future<[User], Error> { promise in
+                self.database
+                    .collection(User.collectionName)
+                    .getDocuments { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(error))
+                            return
+                        }
+
+                        guard
+                            let querySnapshot = querySnapshot
+                        else {
+                            return
+                        }
+
+                        let users = querySnapshot.documents
+                            .compactMap { User.initialize(json: $0.data()) }
+                            .filter { $0.email != FirebaseAuthManager.shared.currentUser?.email }
+
+                        promise(.success(users))
                     }
-
-                    guard
-                        let querySnapshot = querySnapshot
-                    else {
-                        return
-                    }
-
-                    let users = querySnapshot
-                        .documents
-                        .compactMap { User.initialize(json: $0.data()) }
-                        .filter { $0.email != FirebaseAuthManager.shared.currentUser?.email }
-
-                    return observer(.success(users))
-                }
-            return Disposables.create()
-        })
+            }
+        }.eraseToAnyPublisher()
     }
 
     // MARK: - Access for Room
@@ -156,7 +157,7 @@ final class FirestoreManager {
     ) {
         guard
             let chatMessage = ChatMessage(
-                id: Int(user.id) ?? 0,
+                id: user.id,
                 name: user.name,
                 iconUrl: user.imageUrl,
                 message: message,

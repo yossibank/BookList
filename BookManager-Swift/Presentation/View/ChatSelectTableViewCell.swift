@@ -2,6 +2,15 @@ import UIKit
 
 final class ChatSelectTableViewCell: UITableViewCell {
 
+    private let mainStackView: UIStackView = .init(
+        style: .horizontalStyle,
+        spacing: 20
+    )
+
+    private let userInfoStackView: UIStackView = .init(
+        style: .verticalStyle
+    )
+
     private let userIconImageView: UIImageView = .init(
         style: .userIconStyle
     )
@@ -11,7 +20,8 @@ final class ChatSelectTableViewCell: UITableViewCell {
     )
 
     private let lastMessageLabel: UILabel = .init(
-        style: .fontBoldStyle
+        textColor: .lightGray,
+        style: .smallFontBoldStyle
     )
 
     private let sendTimeLabel: UILabel = .init(
@@ -60,40 +70,31 @@ private extension ChatSelectTableViewCell {
     func setupView() {
         backgroundColor = .white
 
-        let viewList = [
-            userIconImageView,
-            userNameLabel,
-            lastMessageLabel,
-            sendTimeLabel
-        ]
-
-        viewList.forEach {
-            contentView.addSubview($0)
+        [userNameLabel, lastMessageLabel].forEach {
+            userInfoStackView.addArrangedSubview($0)
         }
+
+        [userIconImageView, userInfoStackView].forEach {
+            mainStackView.addArrangedSubview($0)
+        }
+
+        contentView.addSubview(mainStackView)
+        contentView.addSubview(sendTimeLabel)
     }
 
     func setupLayout() {
-        userIconImageView.layout {
+        mainStackView.layout {
             $0.centerY == centerYAnchor
-            $0.leading == leadingAnchor + 10
+            $0.leading == leadingAnchor + 20
+        }
+
+        userIconImageView.layout {
             $0.widthConstant == 60
             $0.heightConstant == 60
         }
 
-        userNameLabel.layout {
-            $0.top == userIconImageView.topAnchor - 5
-            $0.leading == userIconImageView.rightAnchor + 20
-            $0.heightConstant == 20
-        }
-
-        lastMessageLabel.layout {
-            $0.top == userNameLabel.bottomAnchor - 10
-            $0.leading == userIconImageView.rightAnchor + 20
-            $0.heightConstant == 20
-        }
-
         sendTimeLabel.layout {
-            $0.top == topAnchor - 10
+            $0.top == topAnchor + 10
             $0.trailing == trailingAnchor - 10
         }
     }

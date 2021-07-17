@@ -1,13 +1,21 @@
+import Foundation
 import UIKit
 
 final class ChatUserListDataSource: NSObject {
-    var chatUserList: [User] = []
+    private weak var viewModel: ChatUserListViewModel!
+
+    init(viewModel: ChatUserListViewModel) {
+        super.init()
+        self.viewModel = viewModel
+    }
 }
+
+// MARK: - Delegate
 
 extension ChatUserListDataSource: UITableViewDataSource {
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        chatUserList.count
+        viewModel.userList.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -16,12 +24,12 @@ extension ChatUserListDataSource: UITableViewDataSource {
             for: indexPath
         )
 
-        if let chatUserListCell = cell as? ChatUserListTableViewCell {
+        if
+            let chatUserListCell = cell as? ChatUserListTableViewCell,
+            let user = viewModel.userList.any(at: indexPath.row)
+        {
             chatUserListCell.selectionStyle = .none
-
-            if let user = chatUserList.any(at: indexPath.row) {
-                chatUserListCell.setup(user: user)
-            }
+            chatUserListCell.setup(user: user)
         }
 
         return cell

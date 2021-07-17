@@ -21,15 +21,16 @@ final class FirebaseAuthManager {
     func createUser(
         email: String,
         password: String,
-        id: String,
         user: User
     ) {
         Auth.auth().createUser(
             withEmail: email,
             password: password
-        ) { _, error in
+        ) { result, error in
+            guard let result = result else { return }
+
             FirestoreManager.shared.createUser(
-                documentPath: id,
+                documentPath: result.user.uid,
                 user: user
             )
             if let error = error {

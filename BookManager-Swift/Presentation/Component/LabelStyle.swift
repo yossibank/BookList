@@ -3,11 +3,13 @@ import UIKit
 extension Stylable where Self == UILabel {
 
     init(
-        text: String,
+        text: String = String.blank,
+        textColor: UIColor = .black,
         style: ViewStyle<Self>
     ) {
         self.init()
         self.text = text
+        self.textColor = textColor
         self.apply(style)
     }
 }
