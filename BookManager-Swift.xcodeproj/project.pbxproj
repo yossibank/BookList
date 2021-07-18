@@ -392,6 +392,8 @@
 		7850563926A3DB31008DCE7D /* ChatCell */ = {
 			isa = PBXGroup;
 			children = (
+				78299CE625E69CFD001868FB /* MyMessageCell */,
+				781B121B25E69A75006968ED /* OtherMessageCell */,
 				7805908C25F48ADA002B5296 /* ChatUserListTableViewCell.swift */,
 				78C7F3AF25E52C94005E9E2B /* ChatSelectTableViewCell.swift */,
 			);
@@ -672,8 +674,6 @@
 				789BC9222683812000C9EC0F /* BookCell */,
 				7850563926A3DB31008DCE7D /* ChatCell */,
 				78421CDF25E926FD00950F62 /* KeyboardAccessory */,
-				78299CE625E69CFD001868FB /* MyMessageCell */,
-				781B121B25E69A75006968ED /* OtherMessageCell */,
 			);
 			path = View;
 			sourceTree = "<group>";
