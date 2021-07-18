@@ -7,11 +7,9 @@ final class MyMessageTableViewCell: UITableViewCell {
 
     @IBOutlet var userMessageTextView: UITextView! {
         didSet {
+            userMessageTextView.layer.cornerRadius = 15.0
             userMessageTextView.textContainerInset = .init(
-                top: 8,
-                left: 4,
-                bottom: 4,
-                right: 4
+                top: 8, left: 4, bottom: 4, right: 4
             )
             userMessageTextView.sizeToFit()
         }

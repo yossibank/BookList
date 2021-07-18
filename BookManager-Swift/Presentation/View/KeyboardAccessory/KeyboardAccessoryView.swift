@@ -10,6 +10,10 @@ final class KeyboardAccessoryView: UIView {
         didSet {
             sendTextView.text = .blank
             sendTextView.textContainerInset = .init(top: 8, left: 8, bottom: 4, right: 4)
+            sendTextView.backgroundColor = Resources.Colors.sendTextColor
+            sendTextView.layer.cornerRadius = 15.0
+            sendTextView.layer.borderWidth = 1.0
+            sendTextView.layer.borderColor = Resources.Colors.sendTextColor.cgColor
             sendTextView.sizeToFit()
             sendTextView.delegate = self
         }

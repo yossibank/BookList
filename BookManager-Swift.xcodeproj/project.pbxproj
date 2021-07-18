@@ -403,6 +403,15 @@
 			path = KeyboardAccessory;
 			sourceTree = "<group>";
 		};
+		7850563926A3DB31008DCE7D /* ChatCell */ = {
+			isa = PBXGroup;
+			children = (
+				7805908C25F48ADA002B5296 /* ChatUserListTableViewCell.swift */,
+				78C7F3AF25E52C94005E9E2B /* ChatSelectTableViewCell.swift */,
+			);
+			path = ChatCell;
+			sourceTree = "<group>";
+		};
 		78524FC625E533A6002AEF87 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -597,12 +606,12 @@
 			path = BusinessModel;
 			sourceTree = "<group>";
 		};
-		789BC9222683812000C9EC0F /* Book */ = {
+		789BC9222683812000C9EC0F /* BookCell */ = {
 			isa = PBXGroup;
 			children = (
 				78CF3AF625ABF85D00ADBB60 /* BookCell.swift */,
 			);
-			path = Book;
+			path = BookCell;
 			sourceTree = "<group>";
 		};
 		789BC9342684593700C9EC0F /* Combine */ = {
@@ -689,12 +698,11 @@
 		78CF3AED25ABF80700ADBB60 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				789BC9222683812000C9EC0F /* Book */,
+				789BC9222683812000C9EC0F /* BookCell */,
+				7850563926A3DB31008DCE7D /* ChatCell */,
 				78421CDF25E926FD00950F62 /* KeyboardAccessory */,
 				78299CE625E69CFD001868FB /* MyMessageCell */,
 				781B121B25E69A75006968ED /* OtherMessageCell */,
-				78C7F3AF25E52C94005E9E2B /* ChatSelectTableViewCell.swift */,
-				7805908C25F48ADA002B5296 /* ChatUserListTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
