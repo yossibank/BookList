@@ -3,17 +3,13 @@ import UIKit
 // temporary
 import FirebaseKit
 
-final class OtherMessageTableViewCell: UITableViewCell {
-
-    @IBOutlet var userIconImageView: UIImageView!
+final class MyMessageTableViewCell: UITableViewCell {
 
     @IBOutlet var userMessageTextView: UITextView! {
         didSet {
+            userMessageTextView.layer.cornerRadius = 15.0
             userMessageTextView.textContainerInset = .init(
-                top: 8,
-                left: 4,
-                bottom: 4,
-                right: 4
+                top: 8, left: 4, bottom: 4, right: 4
             )
             userMessageTextView.sizeToFit()
         }
@@ -24,15 +20,13 @@ final class OtherMessageTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        userIconImageView.backgroundColor = .white
-
         addSubview(
-            OtherMessageBalloonView(
+            MyMessageBalloonView(
                 frame: CGRect(
-                    x: userMessageTextView.frame.minX - 10,
-                    y: userMessageTextView.frame.minY - 10,
-                    width: 50,
-                    height: 50
+                    x: UIScreen.main.bounds.width - 25,
+                    y: 0,
+                    width: 30,
+                    height: 30
                 )
             )
         )
@@ -43,7 +37,6 @@ final class OtherMessageTableViewCell: UITableViewCell {
             with: .hourToMinitue
         )
 
-        userIconImageView.loadImage(with: .string(urlString: chat.iconUrl))
         userMessageTextView.text = chat.message
         sendTimeLabel.text = sendAt
     }

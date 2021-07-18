@@ -1,5 +1,7 @@
 import UIKit
 
+typealias VoidBlock = () -> Void
+
 protocol VCInjectable: UIViewController {
     associatedtype R: Routing
     associatedtype VM: ViewModel
