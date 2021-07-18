@@ -30,7 +30,6 @@
 		78231206259C0D9300D9E723 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78231204259C0D9300D9E723 /* LaunchScreen.storyboard */; };
 		78231211259C0D9300D9E723 /* Training1-SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78231210259C0D9300D9E723 /* Training1-SwiftTests.swift */; };
 		7824042425E92A040001AB52 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7824042325E92A040001AB52 /* KeyboardAccessoryView.swift */; };
-		7824042F25E9374D0001AB52 /* IBDesignableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7824042E25E9374D0001AB52 /* IBDesignableTextView.swift */; };
 		782572AD25F4B2FE007962D0 /* NavigationBarConfigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782572AC25F4B2FE007962D0 /* NavigationBarConfigration.swift */; };
 		7826A73D25F7A885006F23AD /* ChatUserListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7826A73C25F7A885006F23AD /* ChatUserListViewModel.swift */; };
 		78299CE925E69D0D001868FB /* MyMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78299CE725E69D0D001868FB /* MyMessageTableViewCell.swift */; };
@@ -53,7 +52,6 @@
 		784EAB012688A95B0032A0E9 /* Identifable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784EAB002688A95B0032A0E9 /* Identifable.swift */; };
 		78524FC925E533E3002AEF87 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78524FC825E533E3002AEF87 /* ChatRoomViewController.swift */; };
 		785A1AB725A9A369005E8A4B /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785A1AB625A9A369005E8A4B /* SignupViewModel.swift */; };
-		785AB27225E9C527000FEEFE /* TapAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AB27125E9C527000FEEFE /* TapAction.swift */; };
 		78618A0D2688442400912F38 /* ChatSelectRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78618A0C2688442400912F38 /* ChatSelectRouting.swift */; };
 		78618A112688624F00912F38 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78618A102688624F00912F38 /* Colors.swift */; };
 		7873D27A267E0C65007F7B31 /* WishListRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7873D279267E0C65007F7B31 /* WishListRouting.swift */; };
@@ -71,14 +69,10 @@
 		787CB2EF2600C50E003B8CC9 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787CB2EE2600C50E003B8CC9 /* ChatRoomViewModel.swift */; };
 		787CB2F32600C7B2003B8CC9 /* ChatRoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787CB2F22600C7B2003B8CC9 /* ChatRoomDataSource.swift */; };
 		78844C6125B0873600C9AEC0 /* AddBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78844C6025B0873600C9AEC0 /* AddBookViewController.swift */; };
-		7892EF52259C58C0006F7315 /* IBDesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF51259C58C0006F7315 /* IBDesignableButton.swift */; };
-		7892EF5C259C5DF0006F7315 /* IBDesignableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF5B259C5DF0006F7315 /* IBDesignableTextField.swift */; };
-		7892EF62259C642C006F7315 /* IBDesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF61259C642C006F7315 /* IBDesignableView.swift */; };
 		7892EF6C259C7212006F7315 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF6B259C7212006F7315 /* Images.swift */; };
 		7892EF70259C721F006F7315 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF6F259C721F006F7315 /* Resources.swift */; };
 		7892EF79259C73C9006F7315 /* KeyboardNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7892EF78259C73C9006F7315 /* KeyboardNotifier.swift */; };
 		78987B3C259C8813008311DC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78987B3B259C8813008311DC /* LoginViewController.swift */; };
-		78997EE5259C4C5E0076FF97 /* UIView-IBInspectable-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78997EE4259C4C5E0076FF97 /* UIView-IBInspectable-Extensions.swift */; };
 		789BC9362684594700C9EC0F /* UIImageView+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BC9352684594700C9EC0F /* UIImageView+Combine.swift */; };
 		789BC9382684599400C9EC0F /* NotificationName+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BC9372684599400C9EC0F /* NotificationName+Util.swift */; };
 		789BC93A26845A8C00C9EC0F /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BC93926845A8C00C9EC0F /* UIImage+Extension.swift */; };
@@ -114,7 +108,6 @@
 		78E609F125AAAA530041B3D0 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E609F025AAAA530041B3D0 /* Validator.swift */; };
 		78E609F725AAABEA0041B3D0 /* EmailValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E609F625AAABEA0041B3D0 /* EmailValidator.swift */; };
 		78E609FB25AAABF80041B3D0 /* PasswordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E609FA25AAABF80041B3D0 /* PasswordValidator.swift */; };
-		78E60A0025AAAEAC0041B3D0 /* ObservableType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E609FF25AAAEAC0041B3D0 /* ObservableType+Extension.swift */; };
 		78EB164F267620CE00777F32 /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 78EB164E267620CE00777F32 /* APIKit */; };
 		78EC97CE25F4923F007E80FD /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78EC97CD25F4923F007E80FD /* RootNavigationController.swift */; };
 		78F675512684CF6C009E117D /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 78F675502684CF6C009E117D /* Nuke */; };
@@ -170,7 +163,6 @@
 		78231210259C0D9300D9E723 /* Training1-SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Training1-SwiftTests.swift"; sourceTree = "<group>"; };
 		78231212259C0D9300D9E723 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7824042325E92A040001AB52 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
-		7824042E25E9374D0001AB52 /* IBDesignableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBDesignableTextView.swift; sourceTree = "<group>"; };
 		782572AC25F4B2FE007962D0 /* NavigationBarConfigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarConfigration.swift; sourceTree = "<group>"; };
 		7826A73C25F7A885006F23AD /* ChatUserListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUserListViewModel.swift; sourceTree = "<group>"; };
 		78299CE725E69D0D001868FB /* MyMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -192,7 +184,6 @@
 		784EAB002688A95B0032A0E9 /* Identifable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifable.swift; sourceTree = "<group>"; };
 		78524FC825E533E3002AEF87 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		785A1AB625A9A369005E8A4B /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
-		785AB27125E9C527000FEEFE /* TapAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapAction.swift; sourceTree = "<group>"; };
 		78618A0C2688442400912F38 /* ChatSelectRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSelectRouting.swift; sourceTree = "<group>"; };
 		78618A102688624F00912F38 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		7873D279267E0C65007F7B31 /* WishListRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListRouting.swift; sourceTree = "<group>"; };
@@ -210,14 +201,10 @@
 		787CB2EE2600C50E003B8CC9 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
 		787CB2F22600C7B2003B8CC9 /* ChatRoomDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomDataSource.swift; sourceTree = "<group>"; };
 		78844C6025B0873600C9AEC0 /* AddBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookViewController.swift; sourceTree = "<group>"; };
-		7892EF51259C58C0006F7315 /* IBDesignableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBDesignableButton.swift; sourceTree = "<group>"; };
-		7892EF5B259C5DF0006F7315 /* IBDesignableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBDesignableTextField.swift; sourceTree = "<group>"; };
-		7892EF61259C642C006F7315 /* IBDesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBDesignableView.swift; sourceTree = "<group>"; };
 		7892EF6B259C7212006F7315 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		7892EF6F259C721F006F7315 /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		7892EF78259C73C9006F7315 /* KeyboardNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotifier.swift; sourceTree = "<group>"; };
 		78987B3B259C8813008311DC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		78997EE4259C4C5E0076FF97 /* UIView-IBInspectable-Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView-IBInspectable-Extensions.swift"; sourceTree = "<group>"; };
 		789BC9352684594700C9EC0F /* UIImageView+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Combine.swift"; sourceTree = "<group>"; };
 		789BC9372684599400C9EC0F /* NotificationName+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Util.swift"; sourceTree = "<group>"; };
 		789BC93926845A8C00C9EC0F /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
@@ -252,7 +239,6 @@
 		78E609F025AAAA530041B3D0 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		78E609F625AAABEA0041B3D0 /* EmailValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailValidator.swift; sourceTree = "<group>"; };
 		78E609FA25AAABF80041B3D0 /* PasswordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidator.swift; sourceTree = "<group>"; };
-		78E609FF25AAAEAC0041B3D0 /* ObservableType+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+Extension.swift"; sourceTree = "<group>"; };
 		78EB164D2676201C00777F32 /* APIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = APIKit; sourceTree = "<group>"; };
 		78EC97CD25F4923F007E80FD /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		78F675522684CF8A009E117D /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
@@ -487,20 +473,6 @@
 			path = Book;
 			sourceTree = "<group>";
 		};
-		7892EF48259C539B006F7315 /* IBDesignable */ = {
-			isa = PBXGroup;
-			children = (
-				785AB27125E9C527000FEEFE /* TapAction.swift */,
-				78E609FF25AAAEAC0041B3D0 /* ObservableType+Extension.swift */,
-				78997EE4259C4C5E0076FF97 /* UIView-IBInspectable-Extensions.swift */,
-				7892EF61259C642C006F7315 /* IBDesignableView.swift */,
-				7824042E25E9374D0001AB52 /* IBDesignableTextView.swift */,
-				7892EF5B259C5DF0006F7315 /* IBDesignableTextField.swift */,
-				7892EF51259C58C0006F7315 /* IBDesignableButton.swift */,
-			);
-			path = IBDesignable;
-			sourceTree = "<group>";
-		};
 		78987B36259C87EE008311DC /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -656,7 +628,6 @@
 			isa = PBXGroup;
 			children = (
 				781936B225BC5B2B00309FB7 /* BookFileManager.swift */,
-				7892EF48259C539B006F7315 /* IBDesignable */,
 			);
 			path = Before;
 			sourceTree = "<group>";
@@ -925,15 +896,12 @@
 				784E135E25B2A13D008FD947 /* AddBookViewModel.swift in Sources */,
 				78B8A69025E54021005BCB16 /* OtherMessageTableViewCell.swift in Sources */,
 				78CF3AF825ABF85D00ADBB60 /* BookCell.swift in Sources */,
-				7892EF5C259C5DF0006F7315 /* IBDesignableTextField.swift in Sources */,
 				78752AA6267EEE92000B87AC /* Style.swift in Sources */,
 				784E135625B29952008FD947 /* DatePicker+Util.swift in Sources */,
 				78F675532684CF8A009E117D /* UIImageView+Extension.swift in Sources */,
 				78752AAB267EF0D9000B87AC /* ButtonStyle.swift in Sources */,
-				7892EF52259C58C0006F7315 /* IBDesignableButton.swift in Sources */,
 				78CF3AF325ABF82900ADBB60 /* BookListViewController.swift in Sources */,
 				787CB2EF2600C50E003B8CC9 /* ChatRoomViewModel.swift in Sources */,
-				785AB27225E9C527000FEEFE /* TapAction.swift in Sources */,
 				78CF3B0725AC0E3500ADBB60 /* BookListViewModel.swift in Sources */,
 				78B29D0125B3124A00A7DC7F /* BookTitleValidator.swift in Sources */,
 				781F64C1267CB73C00D50B08 /* SignupRouting.swift in Sources */,
@@ -948,7 +916,6 @@
 				7802FBB425BBC91D00565A16 /* Date+Util.swift in Sources */,
 				78752AA4267EEBA9000B87AC /* Layout.swift in Sources */,
 				78F940EA259D7EEF007C972A /* ViewControllers.swift in Sources */,
-				78E60A0025AAAEAC0041B3D0 /* ObservableType+Extension.swift in Sources */,
 				784C3FB22689C53000C0D9EF /* PasswordConfirmationValidator.swift in Sources */,
 				78752AA9267EF0D0000B87AC /* TextFieldStyle.swift in Sources */,
 				78E609D325AA04300041B3D0 /* LoginViewModel.swift in Sources */,
@@ -966,7 +933,6 @@
 				78752AAF267EF412000B87AC /* LabelStyle.swift in Sources */,
 				78BF737E26A1C710001A8092 /* ChatUserListDataSource.swift in Sources */,
 				78FE8CD6267B76750006612E /* FirebaseProvider.swift in Sources */,
-				7824042F25E9374D0001AB52 /* IBDesignableTextView.swift in Sources */,
 				783FBBCB2686CEAB0013CCD7 /* AccountRouting.swift in Sources */,
 				78C7F3B125E52C94005E9E2B /* ChatSelectTableViewCell.swift in Sources */,
 				789BC93A26845A8C00C9EC0F /* UIImage+Extension.swift in Sources */,
@@ -983,7 +949,6 @@
 				78E609F725AAABEA0041B3D0 /* EmailValidator.swift in Sources */,
 				7892EF6C259C7212006F7315 /* Images.swift in Sources */,
 				78B2A163267B7F6B00D9EA0E /* Routing.swift in Sources */,
-				7892EF62259C642C006F7315 /* IBDesignableView.swift in Sources */,
 				781936B325BC5B2B00309FB7 /* BookFileManager.swift in Sources */,
 				789BC9382684599400C9EC0F /* NotificationName+Util.swift in Sources */,
 				78CE46BB26808E920086837B /* ImageViewStyle.swift in Sources */,
@@ -999,7 +964,6 @@
 				78769C4425EA28A6007791E0 /* NickNameValidator.swift in Sources */,
 				78CF3B3525AC48FD00ADBB60 /* BookListDataSource.swift in Sources */,
 				78EC97CE25F4923F007E80FD /* RootNavigationController.swift in Sources */,
-				78997EE5259C4C5E0076FF97 /* UIView-IBInspectable-Extensions.swift in Sources */,
 				78299CEE25E69E15001868FB /* OtherMessageBalloonView.swift in Sources */,
 				78B2A165267B7F7100D9EA0E /* ViewModel.swift in Sources */,
 				784B18FC25BD50FC0071C32E /* WishListDataSource.swift in Sources */,

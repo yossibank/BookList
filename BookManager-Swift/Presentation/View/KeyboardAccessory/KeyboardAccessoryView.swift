@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 protocol KeyboardAccessoryViewDelegate: AnyObject {
@@ -25,7 +26,7 @@ final class KeyboardAccessoryView: UIView {
             sendButton.imageView?.contentMode = .scaleAspectFill
             sendButton.contentVerticalAlignment = .fill
             sendButton.contentHorizontalAlignment = .fill
-            sendButton.onTap { [weak self] in
+            sendButton.tapPublisher.sink { [weak self] in
                 guard
                     let self = self,
                     let message = self.sendTextView.text
@@ -35,10 +36,13 @@ final class KeyboardAccessoryView: UIView {
 
                 self.delegate?.didTappedSendButton(message: message)
             }
+            .store(in: &cancellables)
         }
     }
 
     weak var delegate: KeyboardAccessoryViewDelegate?
+
+    private var cancellables: Set<AnyCancellable> = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
