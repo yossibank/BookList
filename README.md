@@ -37,6 +37,12 @@
 - don't include UIKit
 ```
 
+## FirebasePackages
+```
+- include related firebase handling for each project or package
+- Firebase import are only include here.
+```
+
 ## Test
   - Presentation: ViewModel
   - Domain: Usecase, Mapper
