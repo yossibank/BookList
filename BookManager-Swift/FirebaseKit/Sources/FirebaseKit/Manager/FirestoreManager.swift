@@ -16,14 +16,14 @@ public struct FirestoreManager {
     // MARK: - Access for User
     public static func createUser(
         documentPath: String,
-        user: AccountEntity
+        account: AccountEntity
     ) {
         guard
             let user = AccountEntity(
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                imageUrl: user.imageUrl,
+                id: account.id,
+                name: account.name,
+                email: account.email,
+                imageUrl: account.imageUrl,
                 createdAt: Date()
             ).toDictionary()
         else {

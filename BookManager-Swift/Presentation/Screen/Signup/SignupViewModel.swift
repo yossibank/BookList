@@ -86,7 +86,7 @@ extension SignupViewModel {
         FirebaseStorageManager.fetchDownloadUrlString(path: id) { [weak self] imageUrl in
             guard let self = self else { return }
 
-            let user = AccountEntity(
+            let account = AccountEntity(
                 id: self.id,
                 name: self.userName,
                 email: self.email,
@@ -97,7 +97,7 @@ extension SignupViewModel {
             FirebaseAuthManager.createUser(
                 email: self.email,
                 password: self.password,
-                user: user
+                account: account
             )
         }
     }

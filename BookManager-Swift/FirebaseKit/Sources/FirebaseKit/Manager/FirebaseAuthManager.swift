@@ -12,21 +12,26 @@ public struct FirebaseAuthManager {
     public static func createUser(
         email: String,
         password: String,
-        user: AccountEntity
+        account: AccountEntity
     ) {
         Auth.auth().createUser(
             withEmail: email,
             password: password
         ) { result, error in
-            guard let result = result else { return }
+            guard
+                let result = result
+            else {
+                return
+            }
+
+            if let error = error {
+                Logger.debug(message: "failure create user: \(error.localizedDescription)")
+            }
 
             FirestoreManager.createUser(
                 documentPath: result.user.uid,
-                user: user
+                account: account
             )
-            if let error = error {
-                print("user情報の登録に失敗しました: \(error)")
-            }
         }
     }
 
@@ -39,8 +44,9 @@ public struct FirebaseAuthManager {
             password: password
         ) { user, error in
             if user == nil, let error = error {
-                print("userがログインに失敗しました: \(error)")
+                Logger.debug(message: "failure signIn user: \(error.localizedDescription)")
             }
+
             if let user = user {
                 Logger.debug(message: "success signIn user: \(String(describing: user.user.email))")
             }
@@ -52,10 +58,8 @@ public struct FirebaseAuthManager {
             do {
                 try Auth.auth().signOut()
             } catch {
-                Logger.debug(message: "failed logout \(error.localizedDescription)")
+                Logger.debug(message: "failure logout: \(error.localizedDescription)")
             }
-        } else {
-            return
         }
     }
 }
