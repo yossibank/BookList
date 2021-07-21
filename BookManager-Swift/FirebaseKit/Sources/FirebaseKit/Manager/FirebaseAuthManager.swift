@@ -1,3 +1,5 @@
+import Combine
+import DomainKit
 import FirebaseAuth
 import Utility
 
@@ -13,53 +15,71 @@ public struct FirebaseAuthManager {
         email: String,
         password: String,
         account: AccountEntity
-    ) {
-        Auth.auth().createUser(
-            withEmail: email,
-            password: password
-        ) { result, error in
-            guard
-                let result = result
-            else {
-                return
-            }
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                Auth.auth().createUser(
+                    withEmail: email,
+                    password: password
+                ) { result, error in
+                    guard
+                        let result = result
+                    else {
+                        return
+                    }
 
-            if let error = error {
-                Logger.debug(message: "failure create user: \(error.localizedDescription)")
-            }
+                    if let error = error {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        return
+                    }
 
-            FirestoreManager.createUser(
-                documentPath: result.user.uid,
-                account: account
-            )
-        }
+                    FirestoreManager.createUser(
+                        documentPath: result.user.uid,
+                        account: account
+                    )
+
+                    promise(.success(()))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
 
     public static func signIn(
         email: String,
         password: String
-    ) {
-        Auth.auth().signIn(
-            withEmail: email,
-            password: password
-        ) { user, error in
-            if user == nil, let error = error {
-                Logger.debug(message: "failure signIn user: \(error.localizedDescription)")
-            }
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                Auth.auth().signIn(
+                    withEmail: email,
+                    password: password
+                ) { user, error in
+                    if user == nil, let error = error {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        return
+                    }
 
-            if let user = user {
-                Logger.debug(message: "success signIn user: \(String(describing: user.user.email))")
+                    if let user = user {
+                        Logger.debug(message: "success signIn user: \(String(describing: user.user.email))")
+                        promise(.success(()))
+                    }
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 
-    public static func logout() {
-        if Auth.auth().currentUser != nil {
-            do {
-                try Auth.auth().signOut()
-            } catch {
-                Logger.debug(message: "failure logout: \(error.localizedDescription)")
+    public static func logout() -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                if Auth.auth().currentUser != nil {
+                    do {
+                        try Auth.auth().signOut()
+                        promise(.success(()))
+                    } catch {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                    }
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 }

@@ -1,10 +1,8 @@
 import Combine
 import DomainKit
+import FirebaseKit
 import Foundation
 import Utility
-
-// temporary
-import FirebaseKit
 
 final class SignupViewModel: ViewModel {
     typealias State = LoadingState<UserEntity, APPError>
@@ -62,6 +60,7 @@ extension SignupViewModel {
                         self?.state = .failed(.init(error: error))
 
                     case .finished:
+                        self?.state = .finished
                         self?.createUserForFirebase()
                 }
             } receiveValue: { [weak self] state in
@@ -71,8 +70,6 @@ extension SignupViewModel {
     }
 
     func saveUserIconImage(uploadImage: Data) {
-        state = .loading
-
         FirebaseStorageManager.saveUserIconImage(
             path: id,
             uploadImage: uploadImage
@@ -97,8 +94,6 @@ extension SignupViewModel {
 private extension SignupViewModel {
 
     func createUserForFirebase() {
-        state = .loading
-
         FirebaseStorageManager.fetchDownloadUrlString(path: id)
             .sink { [weak self] completion in
                 switch completion {
@@ -119,13 +114,29 @@ private extension SignupViewModel {
                     createdAt: Date()
                 )
 
-                FirebaseAuthManager.createUser(
-                    email: self.email,
-                    password: self.password,
-                    account: account
-                )
+                self.createUserForFirestore(account: account)
             }
             .store(in: &cancellables)
+    }
+
+    func createUserForFirestore(account: AccountEntity) {
+        FirebaseAuthManager.createUser(
+            email: email,
+            password: password,
+            account: account
+        )
+        .sink { completion in
+            switch completion {
+                case let .failure(error):
+                    self.state = .failed(error)
+
+                case .finished:
+                    self.state = .finished
+            }
+        } receiveValue: { _ in
+            Logger.debug(message: "no receive value")
+        }
+        .store(in: &cancellables)
     }
 
     func isValidate() -> Bool {
