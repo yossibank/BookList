@@ -387,6 +387,9 @@ private extension EditBookViewController {
                     case .loading:
                         self.loadingIndicator.startAnimating()
 
+                    case .finished:
+                        self.loadingIndicator.stopAnimating()
+
                     case let .done(entity):
                         let book = self.viewModel.mapBookEntityToBusinessModel(entity: entity)
 

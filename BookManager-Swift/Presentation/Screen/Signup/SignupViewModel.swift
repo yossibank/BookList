@@ -71,35 +71,61 @@ extension SignupViewModel {
     }
 
     func saveUserIconImage(uploadImage: Data) {
+        state = .loading
+
         FirebaseStorageManager.saveUserIconImage(
             path: id,
             uploadImage: uploadImage
-        )
+        ).sink { [weak self] completion in
+            switch completion {
+                case let .failure(error):
+                    self?.state = .failed(error)
+
+                case .finished:
+                    self?.state = .finished
+            }
+        }
+        receiveValue: { _ in
+            Logger.debug(message: "no receive value")
+        }
+        .store(in: &cancellables)
     }
 }
 
 // MARK: - private methods
 
-extension SignupViewModel {
+private extension SignupViewModel {
 
     func createUserForFirebase() {
-        FirebaseStorageManager.fetchDownloadUrlString(path: id) { [weak self] imageUrl in
-            guard let self = self else { return }
+        state = .loading
 
-            let account = AccountEntity(
-                id: self.id,
-                name: self.userName,
-                email: self.email,
-                imageUrl: imageUrl,
-                createdAt: Date()
-            )
+        FirebaseStorageManager.fetchDownloadUrlString(path: id)
+            .sink { [weak self] completion in
+                switch completion {
+                    case let .failure(error):
+                        self?.state = .failed(error)
 
-            FirebaseAuthManager.createUser(
-                email: self.email,
-                password: self.password,
-                account: account
-            )
-        }
+                    case .finished:
+                        self?.state = .finished
+                }
+            } receiveValue: { [weak self] imageUrl in
+                guard let self = self else { return }
+
+                let account = AccountEntity(
+                    id: self.id,
+                    name: self.userName,
+                    email: self.email,
+                    imageUrl: imageUrl,
+                    createdAt: Date()
+                )
+
+                FirebaseAuthManager.createUser(
+                    email: self.email,
+                    password: self.password,
+                    account: account
+                )
+            }
+            .store(in: &cancellables)
     }
 
     func isValidate() -> Bool {

@@ -7,6 +7,7 @@ public enum APIError: LocalizedError, Equatable {
     case offline
     case decodingError(String)
     case responseError
+    case failureData(String)
 
     public var errorDescription: String? {
         switch self {
@@ -27,6 +28,9 @@ public enum APIError: LocalizedError, Equatable {
 
             case .responseError:
                 return "response error occurred"
+
+            case let .failureData(error):
+                return "failure data \(error)"
         }
     }
 }

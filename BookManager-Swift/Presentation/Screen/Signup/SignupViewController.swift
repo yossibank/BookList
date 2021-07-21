@@ -444,6 +444,9 @@ private extension SignupViewController {
                     case .loading:
                         self.loadingIndicator.startAnimating()
 
+                    case .finished:
+                        self.loadingIndicator.stopAnimating()
+
                     case .done:
                         self.loadingIndicator.stopAnimating()
 

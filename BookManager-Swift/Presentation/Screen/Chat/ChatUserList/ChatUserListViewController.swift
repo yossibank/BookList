@@ -99,6 +99,9 @@ private extension ChatUserListViewController {
                     case .loading:
                         print("loading")
 
+                    case .finished:
+                        print("finished")
+
                     case .done:
                         self?.tableView.reloadData()
 

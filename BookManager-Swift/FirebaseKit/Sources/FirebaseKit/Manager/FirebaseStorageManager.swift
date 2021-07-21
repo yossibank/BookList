@@ -1,3 +1,5 @@
+import Combine
+import DomainKit
 import FirebaseStorage
 import Utility
 
@@ -18,39 +20,45 @@ public struct FirebaseStorageManager {
     public static func saveUserIconImage(
         path: String,
         uploadImage: Data
-    ) {
-        reference
-            .child(Constant.userIconPath)
-            .child(path)
-            .putData(uploadImage, metadata: metaData) { _, error in
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                reference
+                    .child(Constant.userIconPath)
+                    .child(path)
+                    .putData(uploadImage, metadata: metaData) { _, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-            if let error = error {
-                Logger.debug(message: "failure upload image: \(error.localizedDescription)")
+                        promise(.success(()))
+                    }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 
-    public static func fetchDownloadUrlString(
-        path: String,
-        completion: @escaping (String) -> Void
-    ) {
-        reference
-            .child(Constant.userIconPath)
-            .child(path)
-            .downloadURL { url, error in
+    public static func fetchDownloadUrlString(path: String) -> AnyPublisher<String, APPError> {
+        Deferred {
+            Future { promise in
+                reference
+                    .child(Constant.userIconPath)
+                    .child(path)
+                    .downloadURL { url, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-            if let error = error {
-                Logger.debug(message: "failure fetch download url: \(error.localizedDescription)")
-                return
+                        guard
+                            let urlString = url?.absoluteString
+                        else {
+                            return
+                        }
+
+                        promise(.success(urlString))
+                    }
             }
-
-            guard
-                let urlString = url?.absoluteString
-            else {
-                return
-            }
-
-            completion(urlString)
-        }
+        }.eraseToAnyPublisher()
     }
 }

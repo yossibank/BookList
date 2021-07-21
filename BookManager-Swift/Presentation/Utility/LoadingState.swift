@@ -3,4 +3,5 @@ enum LoadingState<T: Equatable, E: Error & Equatable>: Equatable {
     case loading
     case failed(E)
     case done(T)
+    case finished
 }

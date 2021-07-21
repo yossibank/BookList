@@ -103,6 +103,9 @@ private extension AccountViewController {
                     case .loading:
                         self?.loadingIndicator.startAnimating()
 
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
+
                     case .done:
                         self?.loadingIndicator.stopAnimating()
                         self?.routing.showLoginScreen()
