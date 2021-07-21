@@ -9,8 +9,6 @@ public struct FirebaseAuthManager {
         Auth.auth().currentUser
     }
 
-    private init() {}
-
     public static func createUser(
         email: String,
         password: String,
