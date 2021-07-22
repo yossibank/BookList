@@ -7,7 +7,6 @@ public struct FirestoreManager {
 
     private static let database = Firestore.firestore()
     private static var listner: ListenerRegistration?
-    private var cancellables: Set<AnyCancellable> = []
 
     public static func removeListner() {
         listner?.remove()
