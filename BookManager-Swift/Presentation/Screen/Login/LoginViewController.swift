@@ -230,8 +230,8 @@ private extension LoginViewController {
             $0?.delegate = self
         }
 
-        emailTextField.text = "hogehoge@hoge.com"
-        passwordTextField.text = "hogehoge"
+        emailTextField.text = "kamiyama000@gmail.com"
+        passwordTextField.text = "kamiyama"
     }
 
     func setupEvent() {
