@@ -98,40 +98,47 @@ public struct FirestoreManager {
 
     // MARK: - Access for Room
 
-    public static func createRoom(partnerUser: AccountEntity) {
-        database
-            .collection(AccountEntity.collectionName)
-            .document(FirebaseAuthManager.currentUser?.uid ?? "")
-            .getDocument { querySnapshot, error in
-                if let error = error {
-                    Logger.debug(message: "failure get info user \(error.localizedDescription)")
-                    return
-                }
-
-                guard
-                    let querySanpshot = querySnapshot,
-                    let data = querySanpshot.data(),
-                    let user = AccountEntity.initialize(json: data),
-                    let data = RoomEntity(
-                        id: "\(user.id)\(partnerUser.id)",
-                        users: [user, partnerUser],
-                        lastMessage: nil,
-                        lastMessageSendAt: nil,
-                        createdAt: Date()
-                    ).toDictionary()
-                else {
-                    return
-                }
-
-                self.database
-                    .collection(RoomEntity.collectionName)
-                    .document()
-                    .setData(data, merge: true) { error in
+    public static func createRoom(partnerUser: AccountEntity) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                database
+                    .collection(AccountEntity.collectionName)
+                    .document(FirebaseAuthManager.currentUser?.uid ?? "")
+                    .getDocument { querySnapshot, error in
                         if let error = error {
-                            Logger.debug(message: "failure create room \(error.localizedDescription)")
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
                         }
+
+                        guard
+                            let querySanpshot = querySnapshot,
+                            let data = querySanpshot.data(),
+                            let user = AccountEntity.initialize(json: data),
+                            let data = RoomEntity(
+                                id: "\(user.id)\(partnerUser.id)",
+                                users: [user, partnerUser],
+                                lastMessage: nil,
+                                lastMessageSendAt: nil,
+                                createdAt: Date()
+                            ).toDictionary()
+                        else {
+                            return
+                        }
+
+                        self.database
+                            .collection(RoomEntity.collectionName)
+                            .document()
+                            .setData(data, merge: true) { error in
+                                if let error = error {
+                                    promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                                    return
+                                }
+
+                                promise(.success(()))
+                            }
                     }
             }
+        }.eraseToAnyPublisher()
     }
 
     public static func fetchRooms(
