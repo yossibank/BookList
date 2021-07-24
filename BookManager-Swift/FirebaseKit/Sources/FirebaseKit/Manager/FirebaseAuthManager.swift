@@ -36,7 +36,9 @@ public struct FirebaseAuthManager {
                     FirestoreManager.createUser(
                         documentPath: result.user.uid,
                         account: account
-                    )
+                    ) { error in
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                    }
 
                     promise(.success(()))
                 }

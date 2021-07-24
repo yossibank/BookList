@@ -18,7 +18,8 @@ public struct FirestoreManager {
 
     public static func createUser(
         documentPath: String,
-        account: AccountEntity
+        account: AccountEntity,
+        completion: @escaping (Error) -> Void
     ) {
         guard
             let user = AccountEntity(
@@ -37,33 +38,35 @@ public struct FirestoreManager {
             .document(documentPath)
             .setData(user) { error in
                 if let error = error {
-                    Logger.debug(message: "failure register user \(error.localizedDescription)")
+                    completion(error)
                 }
             }
     }
 
-    public static func findUser(
-        documentPath: String,
-        completion: @escaping (AccountEntity) -> Void
-    ) {
-        database
-            .collection(AccountEntity.collectionName)
-            .document(documentPath)
-            .getDocument { querySnapshot, error in
-                if let error = error {
-                    Logger.debug(message: "failure get info user \(error.localizedDescription)")
-                    return
-                }
+    public static func findUser() -> AnyPublisher<AccountEntity, APPError> {
+        Deferred {
+            Future { promise in
+                database
+                    .collection(AccountEntity.collectionName)
+                    .document(FirebaseAuthManager.currentUser?.uid ?? "")
+                    .getDocument { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-                guard
-                    let querySanpshot = querySnapshot,
-                    let data = querySanpshot.data(),
-                    let user = AccountEntity.initialize(json: data)
-                else {
-                    return
-                }
-                completion(user)
+                        guard
+                            let querySanpshot = querySnapshot,
+                            let data = querySanpshot.data(),
+                            let user = AccountEntity.initialize(json: data)
+                        else {
+                            return
+                        }
+
+                        promise(.success(user))
+                    }
             }
+        }.eraseToAnyPublisher()
     }
 
     public static func fetchUsers() -> AnyPublisher<[AccountEntity], APPError>  {

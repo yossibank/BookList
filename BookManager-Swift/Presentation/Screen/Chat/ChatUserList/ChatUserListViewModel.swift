@@ -18,13 +18,13 @@ final class ChatUserListViewModel: ViewModel {
         state = .loading
 
         FirestoreManager.fetchUsers()
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
-                    case .failure:
-                        print("error")
+                    case let .failure(error):
+                        self?.state = .failed(error)
 
                     case .finished:
-                        print("finished")
+                        self?.state = .finished
                 }
             } receiveValue: { [weak self] state in
                 guard let self = self else { return }

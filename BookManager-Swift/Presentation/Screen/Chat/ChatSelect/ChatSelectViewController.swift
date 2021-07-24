@@ -1,6 +1,7 @@
 import Combine
 import CombineCocoa
 import UIKit
+import Utility
 
 extension ChatSelectViewController: VCInjectable {
     typealias R = ChatSelectRouting
@@ -36,6 +37,7 @@ extension ChatSelectViewController {
         setupTableView()
         setupEvent()
         fetchRooms()
+        bindViewModel()
     }
 }
 
@@ -100,6 +102,32 @@ private extension ChatSelectViewController {
             }
         }
     }
+
+    func bindViewModel() {
+        viewModel.findUser()
+
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                    case .standby:
+                        Logger.debug(message: "standby")
+
+                    case .loading:
+                        Logger.debug(message: "loading")
+
+                    case .finished:
+                        Logger.debug(message: "finished")
+
+                    case .done:
+                        Logger.debug(message: "done")
+
+                    case let .failed(error):
+                        self?.showError(error: error)
+                }
+            }
+            .store(in: &cancellables)
+    }
 }
 
 // MARK: - Delegate
@@ -115,9 +143,7 @@ extension ChatSelectViewController: UITableViewDelegate {
         if let room = dataSource.roomList.any(at: indexPath.row) {
             let roomId = room.users.map { String($0.id) }.joined()
 
-            viewModel.findUser { [weak self] user in
-                guard let self = self else { return }
-
+            if let user = viewModel.user {
                 self.routing.showChatRoomScreen(roomId: roomId, user: user)
             }
         }
