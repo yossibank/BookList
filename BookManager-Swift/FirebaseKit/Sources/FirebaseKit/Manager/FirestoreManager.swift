@@ -1,5 +1,7 @@
 import Combine
+import DomainKit
 import FirebaseFirestore
+import Utility
 
 public struct FirestoreManager {
 
@@ -13,6 +15,7 @@ public struct FirestoreManager {
     }
 
     // MARK: - Access for User
+
     public static func createUser(
         documentPath: String,
         account: AccountEntity
@@ -34,7 +37,7 @@ public struct FirestoreManager {
             .document(documentPath)
             .setData(user) { error in
                 if let error = error {
-                    print("user情報の登録に失敗しました: \(error)")
+                    Logger.debug(message: "failure register user \(error.localizedDescription)")
                 }
             }
     }
@@ -48,7 +51,7 @@ public struct FirestoreManager {
             .document(documentPath)
             .getDocument { querySnapshot, error in
                 if let error = error {
-                    print("user情報の取得に失敗しました: \(error)")
+                    Logger.debug(message: "failure get info user \(error.localizedDescription)")
                     return
                 }
 
@@ -63,14 +66,14 @@ public struct FirestoreManager {
             }
     }
 
-    public static func fetchUsers() -> AnyPublisher<[AccountEntity], Error>  {
+    public static func fetchUsers() -> AnyPublisher<[AccountEntity], APPError>  {
         Deferred {
-            Future<[AccountEntity], Error> { promise in
+            Future { promise in
                 self.database
                     .collection(AccountEntity.collectionName)
                     .getDocuments { querySnapshot, error in
                         if let error = error {
-                            promise(.failure(error))
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
                             return
                         }
 
@@ -91,30 +94,41 @@ public struct FirestoreManager {
     }
 
     // MARK: - Access for Room
-    public static func createRoom(partnerUser: AccountEntity) {
-        findUser(documentPath: FirebaseAuthManager.currentUser?.uid ?? "") { user in
-            guard
-                let data = RoomEntity(
-                    id: "\(user.id)\(partnerUser.id)",
-                    users: [user, partnerUser],
-                    lastMessage: nil,
-                    lastMessageSendAt: nil,
-                    createdAt: Date()
-                ).toDictionary()
-            else {
-                return
-            }
 
-            self.database
-                .collection(RoomEntity.collectionName)
-                .document("\(user.id)\(partnerUser.id)")
-                .setData(data, merge: true) { error in
-                    if let error = error {
-                        print("room情報の作成に失敗しました: \(error)")
-                        return
-                    }
+    public static func createRoom(partnerUser: AccountEntity) {
+        database
+            .collection(AccountEntity.collectionName)
+            .document(FirebaseAuthManager.currentUser?.uid ?? "")
+            .getDocument { querySnapshot, error in
+                if let error = error {
+                    Logger.debug(message: "failure get info user \(error.localizedDescription)")
+                    return
                 }
-        }
+
+                guard
+                    let querySanpshot = querySnapshot,
+                    let data = querySanpshot.data(),
+                    let user = AccountEntity.initialize(json: data),
+                    let data = RoomEntity(
+                        id: "\(user.id)\(partnerUser.id)",
+                        users: [user, partnerUser],
+                        lastMessage: nil,
+                        lastMessageSendAt: nil,
+                        createdAt: Date()
+                    ).toDictionary()
+                else {
+                    return
+                }
+
+                self.database
+                    .collection(RoomEntity.collectionName)
+                    .document()
+                    .setData(data, merge: true) { error in
+                        if let error = error {
+                            Logger.debug(message: "failure create room \(error.localizedDescription)")
+                        }
+                    }
+            }
     }
 
     public static func fetchRooms(
@@ -142,6 +156,7 @@ public struct FirestoreManager {
     }
 
     // MARK: - Access for ChatMessage
+
     public static func createChatMessage(
         roomId: String,
         user: AccountEntity,
