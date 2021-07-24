@@ -22,8 +22,8 @@ final class ChatSelectViewModel: ViewModel {
         FirestoreManager.fetchRooms(completion: completion)
     }
 
-    func findUser() {
-        FirestoreManager.findUser()
+    func findCurrentUser() {
+        FirestoreManager.findCurrentUser()
             .sink { [weak self] completion in
                 switch completion {
                     case let .failure(error):

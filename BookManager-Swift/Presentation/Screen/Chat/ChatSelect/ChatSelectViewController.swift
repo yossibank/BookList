@@ -104,7 +104,7 @@ private extension ChatSelectViewController {
     }
 
     func bindViewModel() {
-        viewModel.findUser()
+        viewModel.findCurrentUser()
 
         viewModel.$state
             .receive(on: DispatchQueue.main)

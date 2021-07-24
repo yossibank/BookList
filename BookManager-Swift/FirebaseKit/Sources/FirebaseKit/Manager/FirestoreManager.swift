@@ -43,7 +43,7 @@ public struct FirestoreManager {
             }
     }
 
-    public static func findUser() -> AnyPublisher<AccountEntity, APPError> {
+    public static func findCurrentUser() -> AnyPublisher<AccountEntity, APPError> {
         Deferred {
             Future { promise in
                 database
