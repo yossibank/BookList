@@ -14,6 +14,8 @@ final class ChatSelectViewModel: ViewModel {
     private var cancellables: Set<AnyCancellable> = []
 
     func fetchRooms() {
+        state = .loading
+
         FirestoreManager.fetchRooms()
             .sink { [weak self] completion in
                 switch completion {
@@ -31,6 +33,8 @@ final class ChatSelectViewModel: ViewModel {
     }
 
     func findCurrentUser() {
+        state = .loading
+
         FirestoreManager.findCurrentUser()
             .sink { [weak self] completion in
                 switch completion {

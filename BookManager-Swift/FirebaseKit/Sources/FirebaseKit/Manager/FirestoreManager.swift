@@ -146,7 +146,7 @@ public struct FirestoreManager {
             Future { promise in
                 database
                     .collection(RoomEntity.collectionName)
-                    .getDocuments { querySnapshot, error in
+                    .addSnapshotListener { querySnapshot, error in
                         if let error = error {
                             promise(.failure(.init(error: .failureData(error.localizedDescription))))
                             return
@@ -158,8 +158,8 @@ public struct FirestoreManager {
                             return
                         }
 
-                        let rooms = querySnapshot.documents.compactMap {
-                            RoomEntity.initialize(json: $0.data())
+                        let rooms = querySnapshot.documentChanges.compactMap {
+                            RoomEntity.initialize(json: $0.document.data())
                         }
 
                         promise(.success(rooms))
