@@ -11,6 +11,7 @@ extension SignupViewController: VCInjectable {
 // MARK: - properties
 
 final class SignupViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
     var keyboardNotifier: KeyboardNotifier = .init()

@@ -11,6 +11,7 @@ extension BookListViewController: VCInjectable {
 // MARK: - properties
 
 final class BookListViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 

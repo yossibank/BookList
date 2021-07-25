@@ -5,6 +5,7 @@ import Foundation
 import Utility
 
 final class LoginViewModel: ViewModel {
+
     typealias State = LoadingState<UserEntity, APPError>
 
     @Published var email = String.blank

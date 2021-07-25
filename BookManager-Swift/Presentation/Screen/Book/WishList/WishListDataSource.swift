@@ -1,6 +1,7 @@
 import UIKit
 
 final class WishListDataSource: NSObject {
+
     private weak var viewModel: WishListViewModel!
 
     init(viewModel: WishListViewModel) {

@@ -5,7 +5,9 @@ protocol BookListDataSourceDelegate: AnyObject {
 }
 
 final class BookListDataSource: NSObject {
+
     weak var delegate: BookListDataSourceDelegate?
+
     private weak var viewModel: BookListViewModel!
 
     init(viewModel: BookListViewModel) {

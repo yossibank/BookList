@@ -3,6 +3,7 @@ import DomainKit
 import Utility
 
 final class BookListViewModel: ViewModel {
+
     typealias State = LoadingState<[BookEntity], APPError>
 
     var bookList: [BookBusinessModel] {

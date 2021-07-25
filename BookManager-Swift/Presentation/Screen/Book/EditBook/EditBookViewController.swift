@@ -11,6 +11,7 @@ extension EditBookViewController: VCInjectable {
 // MARK: - properties
 
 final class EditBookViewController: UIViewController {
+
     var routing: NoRouting!
     var viewModel: VM!
     var keyboardNotifier: KeyboardNotifier = .init()

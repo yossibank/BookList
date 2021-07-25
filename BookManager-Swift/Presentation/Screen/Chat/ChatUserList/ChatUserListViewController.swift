@@ -13,6 +13,7 @@ extension ChatUserListViewController: VCInjectable {
 // MARK: - properties
 
 final class ChatUserListViewController: UIViewController {
+
     var routing: R!
     var viewModel: VM!
 

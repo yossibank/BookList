@@ -10,6 +10,7 @@ extension AccountViewController: VCInjectable {
 // MARK: - properties
 
 final class AccountViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 

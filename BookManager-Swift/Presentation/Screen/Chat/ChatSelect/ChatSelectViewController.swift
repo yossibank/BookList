@@ -11,6 +11,7 @@ extension ChatSelectViewController: VCInjectable {
 // MARK: - properties
 
 final class ChatSelectViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 

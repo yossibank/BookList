@@ -4,6 +4,7 @@ import FirebaseKit
 import Utility
 
 final class AccountViewModel: ViewModel {
+
     typealias State = LoadingState<NoEntity, APPError>
 
     @Published private(set) var state: State = .standby

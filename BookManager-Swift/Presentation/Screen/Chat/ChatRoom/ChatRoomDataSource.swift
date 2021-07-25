@@ -4,7 +4,9 @@ import UIKit
 import FirebaseKit
 
 final class ChatRoomDataSource: NSObject {
+
     var chatMessages: [MessageEntity] = []
+
     weak var viewModel: ChatRoomViewModel?
 
     init(viewModel: ChatRoomViewModel) {

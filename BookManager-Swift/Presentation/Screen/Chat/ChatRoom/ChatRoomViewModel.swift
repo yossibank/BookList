@@ -1,6 +1,7 @@
 import FirebaseKit
 
 final class ChatRoomViewModel: ViewModel {
+
     private let roomId: String
     private let user: AccountEntity
 

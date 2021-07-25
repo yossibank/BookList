@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 
 final class ChatUserListDataSource: NSObject {
+
     private weak var viewModel: ChatUserListViewModel!
 
     init(viewModel: ChatUserListViewModel) {
