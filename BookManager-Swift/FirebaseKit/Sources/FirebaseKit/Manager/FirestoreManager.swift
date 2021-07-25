@@ -141,28 +141,31 @@ public struct FirestoreManager {
         }.eraseToAnyPublisher()
     }
 
-    public static func fetchRooms(
-        completion: @escaping ((DocumentChange, RoomEntity) -> Void)
-    ) {
-        listner = database
-            .collection(RoomEntity.collectionName)
-            .addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("room情報の取得に失敗しました: \(error)")
-                    return
-                }
+    public static func fetchRooms() -> AnyPublisher<[RoomEntity], APPError> {
+        Deferred {
+            Future { promise in
+                database
+                    .collection(RoomEntity.collectionName)
+                    .getDocuments { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-                guard let querySnapshot = querySnapshot else { return }
+                        guard
+                            let querySnapshot = querySnapshot
+                        else {
+                            return
+                        }
 
-                querySnapshot.documentChanges.forEach { snapshot in
-                    guard
-                        let room = RoomEntity.initialize(json: snapshot.document.data())
-                    else {
-                        return
+                        let rooms = querySnapshot.documents.compactMap {
+                            RoomEntity.initialize(json: $0.data())
+                        }
+
+                        promise(.success(rooms))
                     }
-                    completion(snapshot, room)
-                }
             }
+        }.eraseToAnyPublisher()
     }
 
     // MARK: - Access for ChatMessage

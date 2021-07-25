@@ -4,22 +4,30 @@ import FirebaseKit
 
 final class ChatSelectViewModel: ViewModel {
 
-    typealias State = LoadingState<AccountEntity, APPError>
+    typealias State = LoadingState<[RoomEntity], APPError>
 
     @Published private(set) var state: State = .standby
 
+    private(set) var roomList: [RoomEntity] = []
     private(set) var user: AccountEntity?
 
     private var cancellables: Set<AnyCancellable> = []
 
-    func removeListener() {
-        FirestoreManager.removeListner()
-    }
+    func fetchRooms() {
+        FirestoreManager.fetchRooms()
+            .sink { [weak self] completion in
+                switch completion {
+                    case let .failure(error):
+                        self?.state = .failed(error)
 
-    func fetchRooms(
-        completion: @escaping ((FirestoreManager.documentChange, RoomEntity) -> Void)
-    ) {
-        FirestoreManager.fetchRooms(completion: completion)
+                    case .finished:
+                        self?.state = .finished
+                }
+            } receiveValue: { [weak self] roomList in
+                self?.state = .done(roomList)
+                self?.roomList = roomList
+            }
+            .store(in: &cancellables)
     }
 
     func findCurrentUser() {
@@ -33,7 +41,6 @@ final class ChatSelectViewModel: ViewModel {
                         self?.state = .finished
                 }
             } receiveValue: { [weak self] user in
-                self?.state = .done(user)
                 self?.user = user
             }
             .store(in: &cancellables)
