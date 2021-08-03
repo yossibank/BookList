@@ -8,6 +8,7 @@ public struct FirestoreManager {
     public typealias documentChange = DocumentChange
 
     private static let database = Firestore.firestore()
+    private static let uid = FirebaseAuthManager.currentUser?.uid ?? ""
     private static var listner: ListenerRegistration?
 
     public static func removeListner() {
@@ -48,7 +49,7 @@ public struct FirestoreManager {
             Future { promise in
                 database
                     .collection(AccountEntity.collectionName)
-                    .document(FirebaseAuthManager.currentUser?.uid ?? "")
+                    .document(uid)
                     .getDocument { querySnapshot, error in
                         if let error = error {
                             promise(.failure(.init(error: .failureData(error.localizedDescription))))
@@ -103,7 +104,7 @@ public struct FirestoreManager {
             Future { promise in
                 database
                     .collection(AccountEntity.collectionName)
-                    .document(FirebaseAuthManager.currentUser?.uid ?? "")
+                    .document(uid)
                     .getDocument { querySnapshot, error in
                         if let error = error {
                             promise(.failure(.init(error: .failureData(error.localizedDescription))))
@@ -115,7 +116,7 @@ public struct FirestoreManager {
                             let data = querySanpshot.data(),
                             let user = AccountEntity.initialize(json: data),
                             let data = RoomEntity(
-                                id: "\(user.id)\(partnerUser.id)",
+                                id: uid,
                                 users: [user, partnerUser],
                                 lastMessage: nil,
                                 lastMessageSendAt: nil,
@@ -127,7 +128,7 @@ public struct FirestoreManager {
 
                         self.database
                             .collection(RoomEntity.collectionName)
-                            .document()
+                            .document("\(uid)\(partnerUser.id)")
                             .setData(data, merge: true) { error in
                                 if let error = error {
                                     promise(.failure(.init(error: .failureData(error.localizedDescription))))
@@ -174,43 +175,49 @@ public struct FirestoreManager {
         roomId: String,
         user: AccountEntity,
         message: String
-    ) {
-        guard
-            let chatMessage = MessageEntity(
-                id: user.id,
-                name: user.name,
-                iconUrl: user.imageUrl,
-                message: message,
-                sendAt: Date()
-            ).toDictionary()
-        else {
-            return
-        }
-
-        database
-            .collection(RoomEntity.collectionName)
-            .document(roomId)
-            .collection(MessageEntity.collecitonName)
-            .document()
-            .setData(chatMessage) { error in
-                if let error = error {
-                    print("chatMessage情報の登録に失敗しました: \(error)")
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                guard
+                    let chatMessage = MessageEntity(
+                        id: user.id,
+                        name: user.name,
+                        iconUrl: user.imageUrl,
+                        message: message,
+                        sendAt: Date()
+                    ).toDictionary()
+                else {
+                    return
                 }
-            }
 
-        database
-            .collection(RoomEntity.collectionName)
-            .document(roomId)
-            .updateData(
-                [
-                    "lastMessage": message,
-                    "lastMessageSendAt": chatMessage["sendAt"] ?? Date()
-                ]
-            ) { error in
-                if let error = error {
-                    print("room情報の更新に失敗しました: \(error)")
-                }
+                database
+                    .collection(RoomEntity.collectionName)
+                    .document("\(uid)\(roomId)")
+                    .collection(MessageEntity.collecitonName)
+                    .document()
+                    .setData(chatMessage) { error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        }
+                    }
+
+                database
+                    .collection(RoomEntity.collectionName)
+                    .document("\(uid)\(roomId)")
+                    .updateData(
+                        [
+                            "lastMessage": message,
+                            "lastMessageSendAt": chatMessage["sendAt"] ?? Date()
+                        ]
+                    ) { error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        }
+
+                        promise(.success(()))
+                    }
             }
+        }.eraseToAnyPublisher()
     }
 
     public static func fetchChatMessages(
@@ -219,7 +226,7 @@ public struct FirestoreManager {
     ) {
         listner = database
             .collection(RoomEntity.collectionName)
-            .document(roomId)
+            .document("\(uid)\(roomId)")
             .collection(MessageEntity.collecitonName)
             .addSnapshotListener { querySnapshot, error in
                 if let error = error {

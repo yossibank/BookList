@@ -23,6 +23,10 @@ final class ChatRoomViewController: UIViewController {
         frame: .zero
     )
 
+    private let loadingIndicator: UIActivityIndicatorView = .init(
+        style: .largeStyle
+    )
+
     private var dataSource: ChatRoomDataSource!
     private var cancellables: Set<AnyCancellable> = []
 
@@ -49,6 +53,7 @@ extension ChatRoomViewController {
         setupTableView()
         setupNotification()
         fetchChatMessages()
+        bindViewModel()
     }
 
     override var inputAccessoryView: UIView? {
@@ -132,6 +137,32 @@ private extension ChatRoomViewController {
                 self.tableView.reloadData()
             }
         }
+    }
+
+    func bindViewModel() {
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                    case .standby:
+                        self?.loadingIndicator.stopAnimating()
+
+                    case .loading:
+                        self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
+
+                    case .done:
+                        self?.loadingIndicator.stopAnimating()
+                        self?.tableView.reloadData()
+
+                    case let .failed(error):
+                        self?.loadingIndicator.stopAnimating()
+                        self?.showError(error: error)
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 

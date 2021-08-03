@@ -121,7 +121,7 @@ extension ChatSelectViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         if let room = viewModel.roomList.any(at: indexPath.row) {
-            let roomId = room.users.map { String($0.id) }.joined()
+            let roomId = room.users.last?.id ?? String.blank
 
             if let user = viewModel.user {
                 self.routing.showChatRoomScreen(roomId: roomId, user: user)
