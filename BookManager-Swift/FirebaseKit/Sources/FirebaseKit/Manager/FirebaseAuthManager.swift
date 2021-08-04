@@ -11,7 +11,7 @@ public struct FirebaseAuthManager {
         Auth.auth().currentUser
     }
 
-    public static func createUser(
+    public static func signUp(
         email: String,
         password: String,
         account: AccountEntity

@@ -121,7 +121,7 @@ private extension SignupViewModel {
     }
 
     func createUserForFirestore(account: AccountEntity) {
-        FirebaseAuthManager.createUser(
+        FirebaseAuthManager.signUp(
             email: email,
             password: password,
             account: account
