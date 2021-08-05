@@ -1,12 +1,11 @@
 import Combine
 import DomainKit
+import FirebaseKit
 import Foundation
 import Utility
 
-// temporary
-import FirebaseKit
-
 final class LoginViewModel: ViewModel {
+
     typealias State = LoadingState<UserEntity, APPError>
 
     @Published var email = String.blank
@@ -46,19 +45,13 @@ extension LoginViewModel {
         usecase
             .login(email: email, password: password)
             .sink { [weak self] completion in
-                guard let self = self else { return }
-
                 switch completion {
                     case let .failure(error):
-                        Logger.debug(message: error.localizedDescription)
-                        self.state = .failed(.init(error: error))
+                        self?.state = .failed(.init(error: error))
 
                     case .finished:
-                        Logger.debug(message: "finished")
-                        FirebaseAuthManager.signIn(
-                            email: self.email,
-                            password: self.password
-                        )
+                        self?.state = .finished
+                        self?.firebaseSignIn()
                 }
             } receiveValue: { [weak self] state in
                 self?.state = .done(state)
@@ -70,6 +63,22 @@ extension LoginViewModel {
 // MARK: - private methods
 
 private extension LoginViewModel {
+
+    func firebaseSignIn() {
+        FirebaseAuthManager.signIn(email: email, password: password)
+            .sink { completion in
+                switch completion {
+                    case let .failure(error):
+                        self.state = .failed(error)
+
+                    case .finished:
+                        self.state = .finished
+                }
+            } receiveValue: { _ in
+                Logger.debug(message: "no receive value")
+            }
+            .store(in: &cancellables)
+    }
 
     func isValidate() -> Bool {
         let results = [

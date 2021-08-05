@@ -11,6 +11,7 @@ extension LoginViewController: VCInjectable {
 // MARK: - properties
 
 final class LoginViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
     var keyboardNotifier: KeyboardNotifier = .init()
@@ -230,8 +231,8 @@ private extension LoginViewController {
             $0?.delegate = self
         }
 
-        emailTextField.text = "hogehoge@hoge.com"
-        passwordTextField.text = "hogehoge"
+        emailTextField.text = "kamiyama000@gmail.com"
+        passwordTextField.text = "kamiyama"
     }
 
     func setupEvent() {
@@ -299,6 +300,9 @@ private extension LoginViewController {
 
                     case .loading:
                         self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
                     case .done:
                         self?.loadingIndicator.stopAnimating()

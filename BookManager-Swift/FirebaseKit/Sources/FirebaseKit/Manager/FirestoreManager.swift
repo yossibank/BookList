@@ -1,31 +1,33 @@
 import Combine
+import DomainKit
 import FirebaseFirestore
+import Utility
 
 public struct FirestoreManager {
 
     public typealias documentChange = DocumentChange
 
     private static let database = Firestore.firestore()
+    private static let uid = FirebaseAuthManager.currentUser?.uid ?? ""
     private static var listner: ListenerRegistration?
-    private var cancellables: Set<AnyCancellable> = []
-
-    private init() {}
 
     public static func removeListner() {
         listner?.remove()
     }
 
     // MARK: - Access for User
+
     public static func createUser(
         documentPath: String,
-        user: AccountEntity
+        account: AccountEntity,
+        completion: @escaping (Error) -> Void
     ) {
         guard
             let user = AccountEntity(
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                imageUrl: user.imageUrl,
+                id: account.id,
+                name: account.name,
+                email: account.email,
+                imageUrl: account.imageUrl,
                 createdAt: Date()
             ).toDictionary()
         else {
@@ -37,43 +39,45 @@ public struct FirestoreManager {
             .document(documentPath)
             .setData(user) { error in
                 if let error = error {
-                    print("user情報の登録に失敗しました: \(error)")
+                    completion(error)
                 }
             }
     }
 
-    public static func findUser(
-        documentPath: String,
-        completion: @escaping (AccountEntity) -> Void
-    ) {
-        database
-            .collection(AccountEntity.collectionName)
-            .document(documentPath)
-            .getDocument { querySnapshot, error in
-                if let error = error {
-                    print("user情報の取得に失敗しました: \(error)")
-                    return
-                }
-
-                guard
-                    let querySanpshot = querySnapshot,
-                    let data = querySanpshot.data(),
-                    let user = AccountEntity.initialize(json: data)
-                else {
-                    return
-                }
-                completion(user)
-            }
-    }
-
-    public static func fetchUsers() -> AnyPublisher<[AccountEntity], Error>  {
+    public static func findCurrentUser() -> AnyPublisher<AccountEntity, APPError> {
         Deferred {
-            Future<[AccountEntity], Error> { promise in
+            Future { promise in
+                database
+                    .collection(AccountEntity.collectionName)
+                    .document(uid)
+                    .getDocument { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
+
+                        guard
+                            let querySanpshot = querySnapshot,
+                            let data = querySanpshot.data(),
+                            let user = AccountEntity.initialize(json: data)
+                        else {
+                            return
+                        }
+
+                        promise(.success(user))
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    public static func fetchUsers() -> AnyPublisher<[AccountEntity], APPError>  {
+        Deferred {
+            Future { promise in
                 self.database
                     .collection(AccountEntity.collectionName)
                     .getDocuments { querySnapshot, error in
                         if let error = error {
-                            promise(.failure(error))
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
                             return
                         }
 
@@ -94,98 +98,126 @@ public struct FirestoreManager {
     }
 
     // MARK: - Access for Room
-    public static func createRoom(partnerUser: AccountEntity) {
-        findUser(documentPath: FirebaseAuthManager.currentUser?.uid ?? "") { user in
-            guard
-                let data = RoomEntity(
-                    id: "\(user.id)\(partnerUser.id)",
-                    users: [user, partnerUser],
-                    lastMessage: nil,
-                    lastMessageSendAt: nil,
-                    createdAt: Date()
-                ).toDictionary()
-            else {
-                return
-            }
 
-            self.database
-                .collection(RoomEntity.collectionName)
-                .document("\(user.id)\(partnerUser.id)")
-                .setData(data, merge: true) { error in
-                    if let error = error {
-                        print("room情報の作成に失敗しました: \(error)")
-                        return
+    public static func createRoom(partnerUser: AccountEntity) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                database
+                    .collection(AccountEntity.collectionName)
+                    .document(uid)
+                    .getDocument { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
+
+                        guard
+                            let querySanpshot = querySnapshot,
+                            let data = querySanpshot.data(),
+                            let user = AccountEntity.initialize(json: data),
+                            let data = RoomEntity(
+                                id: uid,
+                                users: [user, partnerUser],
+                                lastMessage: nil,
+                                lastMessageSendAt: nil,
+                                createdAt: Date()
+                            ).toDictionary()
+                        else {
+                            return
+                        }
+
+                        self.database
+                            .collection(RoomEntity.collectionName)
+                            .document("\(uid)\(partnerUser.id)")
+                            .setData(data, merge: true) { error in
+                                if let error = error {
+                                    promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                                    return
+                                }
+
+                                promise(.success(()))
+                            }
                     }
-                }
-        }
+            }
+        }.eraseToAnyPublisher()
     }
 
-    public static func fetchRooms(
-        completion: @escaping ((DocumentChange, RoomEntity) -> Void)
-    ) {
-        listner = database
-            .collection(RoomEntity.collectionName)
-            .addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("room情報の取得に失敗しました: \(error)")
-                    return
-                }
+    public static func fetchRooms() -> AnyPublisher<[RoomEntity], APPError> {
+        Deferred {
+            Future { promise in
+                database
+                    .collection(RoomEntity.collectionName)
+                    .addSnapshotListener { querySnapshot, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-                guard let querySnapshot = querySnapshot else { return }
+                        guard
+                            let querySnapshot = querySnapshot
+                        else {
+                            return
+                        }
 
-                querySnapshot.documentChanges.forEach { snapshot in
-                    guard
-                        let room = RoomEntity.initialize(json: snapshot.document.data())
-                    else {
-                        return
+                        let rooms = querySnapshot.documentChanges.compactMap {
+                            RoomEntity.initialize(json: $0.document.data())
+                        }
+
+                        promise(.success(rooms))
                     }
-                    completion(snapshot, room)
-                }
             }
+        }.eraseToAnyPublisher()
     }
 
     // MARK: - Access for ChatMessage
+
     public static func createChatMessage(
         roomId: String,
         user: AccountEntity,
         message: String
-    ) {
-        guard
-            let chatMessage = MessageEntity(
-                id: user.id,
-                name: user.name,
-                iconUrl: user.imageUrl,
-                message: message,
-                sendAt: Date()
-            ).toDictionary()
-        else {
-            return
-        }
-
-        database
-            .collection(RoomEntity.collectionName)
-            .document(roomId)
-            .collection(MessageEntity.collecitonName)
-            .document()
-            .setData(chatMessage) { error in
-                if let error = error {
-                    print("chatMessage情報の登録に失敗しました: \(error)")
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                guard
+                    let chatMessage = MessageEntity(
+                        id: user.id,
+                        name: user.name,
+                        iconUrl: user.imageUrl,
+                        message: message,
+                        sendAt: Date()
+                    ).toDictionary()
+                else {
+                    return
                 }
-            }
 
-        database
-            .collection(RoomEntity.collectionName)
-            .document(roomId)
-            .updateData(
-                [
-                    "lastMessage": message,
-                    "lastMessageSendAt": chatMessage["sendAt"] ?? Date()
-                ]
-            ) { error in
-                if let error = error {
-                    print("room情報の更新に失敗しました: \(error)")
-                }
+                database
+                    .collection(RoomEntity.collectionName)
+                    .document("\(uid)\(roomId)")
+                    .collection(MessageEntity.collecitonName)
+                    .document()
+                    .setData(chatMessage) { error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        }
+                    }
+
+                database
+                    .collection(RoomEntity.collectionName)
+                    .document("\(uid)\(roomId)")
+                    .updateData(
+                        [
+                            "lastMessage": message,
+                            "lastMessageSendAt": chatMessage["sendAt"] ?? Date()
+                        ]
+                    ) { error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        }
+
+                        promise(.success(()))
+                    }
             }
+        }.eraseToAnyPublisher()
     }
 
     public static func fetchChatMessages(
@@ -194,7 +226,7 @@ public struct FirestoreManager {
     ) {
         listner = database
             .collection(RoomEntity.collectionName)
-            .document(roomId)
+            .document("\(uid)\(roomId)")
             .collection(MessageEntity.collecitonName)
             .addSnapshotListener { querySnapshot, error in
                 if let error = error {

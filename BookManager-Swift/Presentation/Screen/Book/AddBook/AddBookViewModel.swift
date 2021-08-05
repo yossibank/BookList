@@ -4,6 +4,7 @@ import Foundation
 import Utility
 
 final class AddBookViewModel: ViewModel {
+
     typealias State = LoadingState<BookEntity, APPError>
 
     @Published var bookImage = String.blank

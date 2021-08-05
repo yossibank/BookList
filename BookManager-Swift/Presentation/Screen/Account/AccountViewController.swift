@@ -10,6 +10,7 @@ extension AccountViewController: VCInjectable {
 // MARK: - properties
 
 final class AccountViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 
@@ -102,6 +103,9 @@ private extension AccountViewController {
 
                     case .loading:
                         self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
                     case .done:
                         self?.loadingIndicator.stopAnimating()

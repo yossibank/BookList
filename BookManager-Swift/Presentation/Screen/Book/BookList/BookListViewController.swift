@@ -11,6 +11,7 @@ extension BookListViewController: VCInjectable {
 // MARK: - properties
 
 final class BookListViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 
@@ -116,6 +117,9 @@ private extension BookListViewController {
 
                     case .loading:
                         self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
                     case .done:
                         self?.loadingIndicator.stopAnimating()

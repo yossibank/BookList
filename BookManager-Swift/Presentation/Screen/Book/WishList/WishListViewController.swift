@@ -11,6 +11,7 @@ extension WishListViewController: VCInjectable {
 // MARK: - properties
 
 final class WishListViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 

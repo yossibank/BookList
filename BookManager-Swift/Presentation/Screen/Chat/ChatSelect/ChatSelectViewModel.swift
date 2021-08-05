@@ -1,22 +1,52 @@
-// temporary
+import Combine
+import DomainKit
 import FirebaseKit
 
 final class ChatSelectViewModel: ViewModel {
 
-    func removeListener() {
-        FirestoreManager.removeListner()
+    typealias State = LoadingState<[RoomEntity], APPError>
+
+    @Published private(set) var state: State = .standby
+
+    private(set) var roomList: [RoomEntity] = []
+    private(set) var user: AccountEntity?
+
+    private var cancellables: Set<AnyCancellable> = []
+
+    func fetchRooms() {
+        state = .loading
+
+        FirestoreManager.fetchRooms()
+            .sink { [weak self] completion in
+                switch completion {
+                    case let .failure(error):
+                        self?.state = .failed(error)
+
+                    case .finished:
+                        self?.state = .finished
+                }
+            } receiveValue: { [weak self] roomList in
+                self?.state = .done(roomList)
+                self?.roomList = roomList
+            }
+            .store(in: &cancellables)
     }
 
-    func fetchRooms(
-        completion: @escaping ((FirestoreManager.documentChange, RoomEntity) -> Void)
-    ) {
-        FirestoreManager.fetchRooms(completion: completion)
-    }
+    func findCurrentUser() {
+        state = .loading
 
-    func findUser(completion: @escaping (AccountEntity) -> Void) {
-        FirestoreManager.findUser(
-            documentPath: FirebaseAuthManager.currentUser?.uid ?? String.blank,
-            completion: completion
-        )
+        FirestoreManager.findCurrentUser()
+            .sink { [weak self] completion in
+                switch completion {
+                    case let .failure(error):
+                        self?.state = .failed(error)
+
+                    case .finished:
+                        self?.state = .finished
+                }
+            } receiveValue: { [weak self] user in
+                self?.user = user
+            }
+            .store(in: &cancellables)
     }
 }

@@ -1,16 +1,19 @@
 import UIKit
 
-// temporary
-import FirebaseKit
-
 final class ChatSelectDataSource: NSObject {
-    var roomList: [RoomEntity] = []
+
+    weak var viewModel: ChatSelectViewModel!
+
+    init(viewModel: ChatSelectViewModel) {
+        super.init()
+        self.viewModel = viewModel
+    }
 }
 
 extension ChatSelectDataSource: UITableViewDataSource {
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        roomList.count
+        viewModel.roomList.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -20,7 +23,7 @@ extension ChatSelectDataSource: UITableViewDataSource {
         )
 
         if let chatSelectCell = cell as? ChatSelectTableViewCell {
-            if let room = roomList.any(at: indexPath.row) {
+            if let room = viewModel.roomList.any(at: indexPath.row) {
                 chatSelectCell.setup(room: room)
             }
         }

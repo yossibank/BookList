@@ -1,12 +1,11 @@
 import Combine
 import DomainKit
+import FirebaseKit
 import Foundation
 import Utility
 
-// temporary
-import FirebaseKit
-
 final class SignupViewModel: ViewModel {
+
     typealias State = LoadingState<UserEntity, APPError>
 
     @Published var userName = String.blank
@@ -62,6 +61,7 @@ extension SignupViewModel {
                         self?.state = .failed(.init(error: error))
 
                     case .finished:
+                        self?.state = .finished
                         self?.createUserForFirebase()
                 }
             } receiveValue: { [weak self] state in
@@ -74,32 +74,70 @@ extension SignupViewModel {
         FirebaseStorageManager.saveUserIconImage(
             path: id,
             uploadImage: uploadImage
-        )
+        ).sink { [weak self] completion in
+            switch completion {
+                case let .failure(error):
+                    self?.state = .failed(error)
+
+                case .finished:
+                    self?.state = .finished
+            }
+        }
+        receiveValue: { _ in
+            Logger.debug(message: "no receive value")
+        }
+        .store(in: &cancellables)
     }
 }
 
 // MARK: - private methods
 
-extension SignupViewModel {
+private extension SignupViewModel {
 
     func createUserForFirebase() {
-        FirebaseStorageManager.fetchDownloadUrlString(path: id) { [weak self] imageUrl in
-            guard let self = self else { return }
+        FirebaseStorageManager.fetchDownloadUrlString(path: id)
+            .sink { [weak self] completion in
+                switch completion {
+                    case let .failure(error):
+                        self?.state = .failed(error)
 
-            let user = AccountEntity(
-                id: self.id,
-                name: self.userName,
-                email: self.email,
-                imageUrl: imageUrl,
-                createdAt: Date()
-            )
+                    case .finished:
+                        self?.state = .finished
+                }
+            } receiveValue: { [weak self] imageUrl in
+                guard let self = self else { return }
 
-            FirebaseAuthManager.createUser(
-                email: self.email,
-                password: self.password,
-                user: user
-            )
+                let account = AccountEntity(
+                    id: self.id,
+                    name: self.userName,
+                    email: self.email,
+                    imageUrl: imageUrl,
+                    createdAt: Date()
+                )
+
+                self.createUserForFirestore(account: account)
+            }
+            .store(in: &cancellables)
+    }
+
+    func createUserForFirestore(account: AccountEntity) {
+        FirebaseAuthManager.signUp(
+            email: email,
+            password: password,
+            account: account
+        )
+        .sink { completion in
+            switch completion {
+                case let .failure(error):
+                    self.state = .failed(error)
+
+                case .finished:
+                    self.state = .finished
+            }
+        } receiveValue: { _ in
+            Logger.debug(message: "no receive value")
         }
+        .store(in: &cancellables)
     }
 
     func isValidate() -> Bool {

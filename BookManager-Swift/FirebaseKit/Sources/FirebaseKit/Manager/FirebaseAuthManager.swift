@@ -1,3 +1,5 @@
+import Combine
+import DomainKit
 import FirebaseAuth
 import Utility
 
@@ -9,55 +11,77 @@ public struct FirebaseAuthManager {
         Auth.auth().currentUser
     }
 
-    private init() {}
-
-    public static func createUser(
+    public static func signUp(
         email: String,
         password: String,
-        user: AccountEntity
-    ) {
-        Auth.auth().createUser(
-            withEmail: email,
-            password: password
-        ) { result, error in
-            guard let result = result else { return }
+        account: AccountEntity
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                Auth.auth().createUser(
+                    withEmail: email,
+                    password: password
+                ) { result, error in
+                    guard
+                        let result = result
+                    else {
+                        return
+                    }
 
-            FirestoreManager.createUser(
-                documentPath: result.user.uid,
-                user: user
-            )
-            if let error = error {
-                print("user情報の登録に失敗しました: \(error)")
+                    if let error = error {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        return
+                    }
+
+                    FirestoreManager.createUser(
+                        documentPath: result.user.uid,
+                        account: account
+                    ) { error in
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                    }
+
+                    promise(.success(()))
+                }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 
     public static func signIn(
         email: String,
         password: String
-    ) {
-        Auth.auth().signIn(
-            withEmail: email,
-            password: password
-        ) { user, error in
-            if user == nil, let error = error {
-                print("userがログインに失敗しました: \(error)")
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                Auth.auth().signIn(
+                    withEmail: email,
+                    password: password
+                ) { user, error in
+                    if user == nil, let error = error {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                        return
+                    }
+
+                    if let user = user {
+                        Logger.debug(message: "success signIn user: \(String(describing: user.user.email))")
+                        promise(.success(()))
+                    }
+                }
             }
-            if let user = user {
-                Logger.debug(message: "success signIn user: \(String(describing: user.user.email))")
-            }
-        }
+        }.eraseToAnyPublisher()
     }
 
-    public static func logout() {
-        if Auth.auth().currentUser != nil {
-            do {
-                try Auth.auth().signOut()
-            } catch {
-                Logger.debug(message: "failed logout \(error.localizedDescription)")
+    public static func logout() -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                if Auth.auth().currentUser != nil {
+                    do {
+                        try Auth.auth().signOut()
+                        promise(.success(()))
+                    } catch {
+                        promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                    }
+                }
             }
-        } else {
-            return
-        }
+        }.eraseToAnyPublisher()
     }
 }

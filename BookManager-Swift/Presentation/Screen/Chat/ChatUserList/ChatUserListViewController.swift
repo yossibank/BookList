@@ -13,11 +13,16 @@ extension ChatUserListViewController: VCInjectable {
 // MARK: - properties
 
 final class ChatUserListViewController: UIViewController {
+
     var routing: R!
     var viewModel: VM!
 
     private let tableView: UITableView = .init(
         frame: .zero
+    )
+
+    private let loadingIndicator: UIActivityIndicatorView = .init(
+        style: .largeStyle
     )
 
     private var selectedUser: AccountEntity?
@@ -31,7 +36,6 @@ extension ChatUserListViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.fetchUsers()
         setupView()
         setupLayout()
         setupNavigationItem()
@@ -89,20 +93,27 @@ private extension ChatUserListViewController {
     }
 
     func bindViewModel() {
+        viewModel.fetchUsers()
+
         viewModel.$state
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 switch state {
                     case .standby:
-                        print("standby")
+                        self?.loadingIndicator.stopAnimating()
 
                     case .loading:
-                        print("loading")
+                        self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
                     case .done:
+                        self?.loadingIndicator.stopAnimating()
                         self?.tableView.reloadData()
 
                     case let .failed(error):
+                        self?.loadingIndicator.stopAnimating()
                         self?.showError(error: error)
                 }
             }

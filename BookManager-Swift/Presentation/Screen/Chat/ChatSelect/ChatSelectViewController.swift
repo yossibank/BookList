@@ -1,6 +1,7 @@
 import Combine
 import CombineCocoa
 import UIKit
+import Utility
 
 extension ChatSelectViewController: VCInjectable {
     typealias R = ChatSelectRouting
@@ -10,6 +11,7 @@ extension ChatSelectViewController: VCInjectable {
 // MARK: - properties
 
 final class ChatSelectViewController: UIViewController {
+
     var routing: R! { didSet { routing.viewController = self } }
     var viewModel: VM!
 
@@ -17,12 +19,12 @@ final class ChatSelectViewController: UIViewController {
         frame: .zero
     )
 
+    private let loadingIndicator: UIActivityIndicatorView = .init(
+        style: .largeStyle
+    )
+
     private var dataSource: ChatSelectDataSource!
     private var cancellables: Set<AnyCancellable> = []
-
-    deinit {
-        viewModel.removeListener()
-    }
 }
 
 // MARK: - override methods
@@ -35,7 +37,7 @@ extension ChatSelectViewController {
         setupLayout()
         setupTableView()
         setupEvent()
-        fetchRooms()
+        bindViewModel()
     }
 }
 
@@ -58,7 +60,7 @@ private extension ChatSelectViewController {
     }
 
     func setupTableView() {
-        dataSource = ChatSelectDataSource()
+        dataSource = ChatSelectDataSource(viewModel: viewModel)
         tableView.dataSource = dataSource
 
         tableView.register(
@@ -78,27 +80,33 @@ private extension ChatSelectViewController {
             .store(in: &cancellables)
     }
 
-    func fetchRooms() {
-        viewModel.fetchRooms { [weak self] documentChange, room in
-            guard let self = self else { return }
+    func bindViewModel() {
+        viewModel.fetchRooms()
+        viewModel.findCurrentUser()
 
-            switch documentChange.type {
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                    case .standby:
+                        self?.loadingIndicator.stopAnimating()
 
-                case .added:
-                    self.dataSource.roomList.append(room)
+                    case .loading:
+                        self?.loadingIndicator.startAnimating()
 
-                case .removed:
-                    self.dataSource.roomList = self.dataSource.roomList.filter { $0.id != room.id }
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
-                case .modified:
-                    self.dataSource.roomList = []
-                    self.dataSource.roomList.append(room)
+                    case .done:
+                        self?.loadingIndicator.stopAnimating()
+                        self?.tableView.reloadData()
+
+                    case let .failed(error):
+                        self?.loadingIndicator.stopAnimating()
+                        self?.showError(error: error)
+                }
             }
-
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+            .store(in: &cancellables)
     }
 }
 
@@ -112,12 +120,10 @@ extension ChatSelectViewController: UITableViewDelegate {
     ) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if let room = dataSource.roomList.any(at: indexPath.row) {
-            let roomId = room.users.map { String($0.id) }.joined()
+        if let room = viewModel.roomList.any(at: indexPath.row) {
+            let roomId = room.users.last?.id ?? String.blank
 
-            viewModel.findUser { [weak self] user in
-                guard let self = self else { return }
-
+            if let user = viewModel.user {
                 self.routing.showChatRoomScreen(roomId: roomId, user: user)
             }
         }

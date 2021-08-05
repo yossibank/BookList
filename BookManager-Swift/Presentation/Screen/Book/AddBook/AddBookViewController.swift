@@ -11,6 +11,7 @@ extension AddBookViewController: VCInjectable {
 // MARK: - properties
 
 final class AddBookViewController: UIViewController {
+
     var routing: NoRouting!
     var viewModel: VM!
     var keyboardNotifier: KeyboardNotifier = .init()
@@ -369,6 +370,9 @@ private extension AddBookViewController {
 
                     case .loading:
                         self?.loadingIndicator.startAnimating()
+
+                    case .finished:
+                        self?.loadingIndicator.stopAnimating()
 
                     case .done:
                         self?.loadingIndicator.stopAnimating()

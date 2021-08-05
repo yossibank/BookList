@@ -1,6 +1,6 @@
 import Combine
+import DomainKit
 import FirebaseStorage
-import FirebaseStorageSwift
 import Utility
 
 public struct FirebaseStorageManager {
@@ -20,32 +20,45 @@ public struct FirebaseStorageManager {
     public static func saveUserIconImage(
         path: String,
         uploadImage: Data
-    ) {
-        reference.child(Constant.userIconPath).child(path).putData(
-            uploadImage,
-            metadata: metaData
-        ) { _, error in
-            if let error = error {
-                Logger.debug(message: error.localizedDescription)
-                return
+    ) -> AnyPublisher<Void, APPError> {
+        Deferred {
+            Future { promise in
+                reference
+                    .child(Constant.userIconPath)
+                    .child(path)
+                    .putData(uploadImage, metadata: metaData) { _, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
+
+                        promise(.success(()))
+                    }
             }
-        }
+        }.eraseToAnyPublisher()
     }
 
-    public static func fetchDownloadUrlString(path: String, completion: @escaping (String) -> Void) {
-        reference.child(Constant.userIconPath).child(path).downloadURL { url, error in
-            if let error = error {
-                Logger.debug(message: error.localizedDescription)
-                return
-            }
+    public static func fetchDownloadUrlString(path: String) -> AnyPublisher<String, APPError> {
+        Deferred {
+            Future { promise in
+                reference
+                    .child(Constant.userIconPath)
+                    .child(path)
+                    .downloadURL { url, error in
+                        if let error = error {
+                            promise(.failure(.init(error: .failureData(error.localizedDescription))))
+                            return
+                        }
 
-            guard
-                let urlString = url?.absoluteString
-            else {
-                return
-            }
+                        guard
+                            let urlString = url?.absoluteString
+                        else {
+                            return
+                        }
 
-            completion(urlString)
-        }
+                        promise(.success(urlString))
+                    }
+            }
+        }.eraseToAnyPublisher()
     }
 }
