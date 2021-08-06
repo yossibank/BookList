@@ -1,11 +1,4 @@
 import XCTest
 @testable import FirebaseKit
 
-final class FirebaseKitTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(FirebaseKit().text, "Hello, World!")
-    }
-}
+final class FirebaseKitTests: XCTestCase {}

@@ -52,16 +52,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FirebaseKitTests"
-               BuildableName = "FirebaseKitTests"
-               BlueprintName = "FirebaseKitTests"
-               ReferencedContainer = "container:BookManager-Swift/FirebaseKit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "DomainKitTests"
                BuildableName = "DomainKitTests"
                BlueprintName = "DomainKitTests"
