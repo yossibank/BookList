@@ -7,7 +7,7 @@ public protocol BookListUsecase {
     ) -> AnyPublisher<[BookEntity], APIError>
 }
 
-extension UsecaseImpl: BookListUsecase where R == Repos.Book.Get, M == BookListMapper {
+extension UsecaseImpl: BookListUsecase where R == Repos.API.Book.Get, M == BookListMapper {
 
     public func fetchBookList(
         pageRequest: Int

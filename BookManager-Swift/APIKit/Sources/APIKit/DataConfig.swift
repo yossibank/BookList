@@ -6,8 +6,4 @@ public struct DataConfig {
     public static func setup(baseURL: String) {
         self.baseURL = baseURL
     }
-
-    public static func hasAccessToken() -> Bool {
-        SecretDataHolder.accessToken != nil
-    }
 }

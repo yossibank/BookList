@@ -10,9 +10,9 @@ public struct Domain {
 
             public static func Signup(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Account.Signup, UserMapper> {
+            ) -> UsecaseImpl<Repos.API.Account.Signup, UserMapper> {
                 .init(
-                    repository: Repos.Account.Signup(),
+                    repository: Repos.API.Account.Signup(),
                     mapper: UserMapper(),
                     useTestData: useTestData
                 )
@@ -20,9 +20,9 @@ public struct Domain {
 
             public static func Login(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Account.Login, UserMapper> {
+            ) -> UsecaseImpl<Repos.API.Account.Login, UserMapper> {
                 .init(
-                    repository: Repos.Account.Login(),
+                    repository: Repos.API.Account.Login(),
                     mapper: UserMapper(),
                     useTestData: useTestData
                 )
@@ -30,9 +30,9 @@ public struct Domain {
 
             public static func Logout(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Account.Logout, NoMapper> {
+            ) -> UsecaseImpl<Repos.API.Account.Logout, NoMapper> {
                 .init(
-                    repository: Repos.Account.Logout(),
+                    repository: Repos.API.Account.Logout(),
                     mapper: NoMapper(),
                     useTestData: useTestData
                 )
@@ -43,9 +43,9 @@ public struct Domain {
 
             public static func FetchBookList(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Book.Get, BookListMapper> {
+            ) -> UsecaseImpl<Repos.API.Book.Get, BookListMapper> {
                 .init(
-                    repository: Repos.Book.Get(),
+                    repository: Repos.API.Book.Get(),
                     mapper: BookListMapper(),
                     useTestData: useTestData
                 )
@@ -53,9 +53,9 @@ public struct Domain {
 
             public static func AddBook(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Book.Post, BookMapper> {
+            ) -> UsecaseImpl<Repos.API.Book.Post, BookMapper> {
                 .init(
-                    repository: Repos.Book.Post(),
+                    repository: Repos.API.Book.Post(),
                     mapper: BookMapper(),
                     useTestData: useTestData
                 )
@@ -63,12 +63,23 @@ public struct Domain {
 
             public static func EditBook(
                 useTestData: Bool = false
-            ) -> UsecaseImpl<Repos.Book.Put, BookMapper> {
+            ) -> UsecaseImpl<Repos.API.Book.Put, BookMapper> {
                 .init(
-                    repository: Repos.Book.Put(),
+                    repository: Repos.API.Book.Put(),
                     mapper: BookMapper(),
                     useTestData: useTestData
                 )
+            }
+        }
+    }
+
+    public struct Local {
+
+        public struct Token {
+
+            public static func hasAccessToken() -> Bool {
+                let token = Repos.Local.Token.Get().request()
+                return token != nil
             }
         }
     }
