@@ -12,6 +12,6 @@ struct PackageConfig {
     }
 
     static func hasAccessToken() -> Bool {
-        DomainConfig.hasAccessToken()
+        Domain.Local.Token.hasAccessToken()
     }
 }

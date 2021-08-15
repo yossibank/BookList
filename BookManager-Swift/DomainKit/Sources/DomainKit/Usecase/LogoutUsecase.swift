@@ -5,7 +5,7 @@ public protocol LogoutUsecase {
     func logout() -> AnyPublisher<NoEntity, APIError>
 }
 
-extension UsecaseImpl: LogoutUsecase where R == Repos.Account.Logout, M == NoMapper {
+extension UsecaseImpl: LogoutUsecase where R == Repos.API.Account.Logout, M == NoMapper {
 
     public func logout() -> AnyPublisher<NoEntity, APIError> {
         toPublisher { promise in

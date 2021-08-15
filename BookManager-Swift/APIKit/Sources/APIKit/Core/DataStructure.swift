@@ -1,3 +1,3 @@
 import Foundation
 
-public protocol DataStructure: Decodable, Equatable {}
+public protocol DataStructure: Codable, Equatable {}

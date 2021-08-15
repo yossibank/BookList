@@ -3,5 +3,5 @@ struct PersistedDataHolder {
     static var onboardingFinished: Bool?
 
     @FileStorage(file: .someFile)
-    static var someData: [String]?
+    static var someData: [BookResponse]?
 }
